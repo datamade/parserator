@@ -1,54 +1,48 @@
 from lxml import etree
 import sys
 import os.path
-import csv
-from argparse import ArgumentParser
-import unidecode
+import data_prep_utils
+import config
 
+# ********test this
+def consoleLabel(raw_strings, labels): 
+    print "Start console labeling!"
 
-def consoleLabel(raw_addr, label_options, parser): 
-
-    friendly_tag_dict = dict((label[1], label[0])
-                            for label in label_options)
     valid_responses = ['y', 'n', 's', 'f', '']
-    addrs_left_to_tag = []
     finished = False
 
-    addrs_left_to_tag = raw_addr.copy()
+    strings_left_to_tag = raw_strings.copy()
+    total_strings = len(raw_strings)
+    tagged_strings = set([])
 
-    total_addrs = len(raw_addr)
+    for i, raw_sequence in enumerate(raw_strings, 1):
 
-    tagged_addr = set([])
-
-    for i, addr_string in enumerate(raw_addr, 1):
         if not finished:
 
-            print "(%s of %s)" % (i, total_addrs)
+            print "(%s of %s)" % (i, total_strings)
             print "-"*50
-            print "ADDRESS STRING: ", addr_string
-                
-            preds = parser(addr_string)
+            print "STRING: ", raw_sequence
+            
+            preds = parse(raw_sequence)
 
             user_input = None 
             while user_input not in valid_responses :
 
-
-                friendly_addr = [(token[0], friendly_tag_dict[token[1]]) for token in preds]
-                print_table(friendly_addr)
+                friendly_repr = [(token[0], token[1]) for token in preds]
+                print_table(friendly_repr)
 
                 sys.stderr.write('Is this correct? (y)es / (n)o / (s)kip / (f)inish tagging\n')
                 user_input = sys.stdin.readline().strip()
 
                 if user_input =='y':
-                    tagged_addr.add(tuple(preds))
-                    addrs_left_to_tag.remove(addr_string)
+                    tagged_strings.add(tuple(preds))
+                    strings_left_to_tag.remove(raw_sequence)
 
                 elif user_input =='n':
-                    corrected_addr = manualTagging(preds, 
-                                                label_options,
-                                                friendly_tag_dict)
-                    tagged_addr.add(tuple(corrected_addr))
-                    addrs_left_to_tag.remove(addr_string)
+                    corrected_string = manualTagging(preds, 
+                                                labels)
+                    tagged_strings.add(tuple(corrected_string))
+                    strings_left_to_tag.remove(raw_sequence)
 
 
                 elif user_input in ('' or 's') :
@@ -57,9 +51,7 @@ def consoleLabel(raw_addr, label_options, parser):
                     finished = True
 
     print "Done! Yay!"
-    
-    return tagged_addr, addrs_left_to_tag
-
+    return tagged_strings, strings_left_to_tag
 
 
 def print_table(table):
@@ -69,16 +61,13 @@ def print_table(table):
                                 for i, x in enumerate(line))
         
 
-
-def manualTagging(preds, label_options, friendly_tag_dict):
-    valid_input_tags = dict((str(i), tag[0]) 
-                            for i, tag
-                            in enumerate(label_options))
-    tagged_addr = []
-    for token in preds:
+def manualTagging(preds, labels):
+    valid_input_tags = dict( (str(i), label) for i, label in enumerate(labels))
+    tagged_sequence = []
+    for token_pred in preds:
         valid_tag = False
         while not valid_tag:
-            print 'What is \''+token[0]+'\' ? If '+ friendly_tag_dict[token[1]]+' hit return' #where should the tag list be printed?
+            print 'What is \''+token_pred[0]+'\' ? If '+ token_pred[1] +' hit return' #where should the tag list be printed?
             user_input_tag = sys.stdin.readline().strip()
             if user_input_tag in valid_input_tags or user_input_tag == '':
                 valid_tag = True
@@ -89,72 +78,88 @@ def manualTagging(preds, label_options, friendly_tag_dict):
 
         xml_tag = ''
         if user_input_tag == '':
-            xml_tag = token[1]
+            xml_tag = token_pred[1]
         else:
-            xml_tag = label_options[int(user_input_tag)][1]
+            xml_tag = labels[int(user_input_tag)]
 
-        tagged_addr.append((token[0], xml_tag))
-    return tagged_addr
-
-def appendListToXML(addr_list, collection) :
-    for addr in addr_list:
-        addr_xml = addr2XML(addr)
-        collection.append(addr_xml)
-    return collection
-
-def addr2XML(addr) :
-    addr_xml = etree.Element('AddressString')
-    for token, label in addr:
-        component_xml = etree.Element(label)
-        component_xml.text = token
-        component_xml.tail = ' '
-        addr_xml.append(component_xml)
-    addr_xml[-1].tail = ''
-    return addr_xml
+        tagged_sequence.append((token[0], xml_tag))
+    return tagged_sequence
 
 
-def stripFormatting(collection) :
-    collection.text = None 
-    for element in collection :
-        element.text = None
-        element.tail = None
-        
-    return collection
+def naiveConsoleLabel(raw_strings, labels): 
+    print "Start console labeling!"
+
+    valid_responses = ['t', 's', 'f', '']
+    finished = False
+
+    strings_left_to_tag = raw_strings.copy()
+    total_strings = len(raw_strings)
+    tagged_strings = set([])
+
+    for i, raw_sequence in enumerate(raw_strings, 1):
+        if not finished:
+
+            print "(%s of %s)" % (i, total_strings)
+            print "-"*50
+            print "STRING: ", raw_sequence
+            
+            tokens = tokenize(raw_sequence)
+
+            user_input = None 
+            while user_input not in valid_responses :
+
+                sys.stderr.write('(t)ag / (s)kip / (f)inish tagging\n')
+                user_input = sys.stdin.readline().strip()
+
+                if user_input =='t' or user_input == '':
+                    tagged_sequence = naiveManualTag(tokens, labels)
+                    tagged_strings.add(tuple(tagged_sequence))
+                    strings_left_to_tag.remove(raw_sequence)
+
+                elif user_input == 's':
+                    print "Skipped\n"
+                elif user_input == 'f':
+                    finished = True
+
+    print "Done! Yay!"
+    return tagged_strings, strings_left_to_tag
+
+def naiveManualTag(raw_sequence, labels):
+    valid_input_tags = dict((str(i), label) for i, label in enumerate(labels))
+    sequence_labels = []
+    for token in raw_sequence:
+        valid_tag = False
+        while not valid_tag:
+            print 'What is \''+token+'\' ?'
+            user_input_tag = sys.stdin.readline().strip()
+            if user_input_tag in valid_input_tags:
+                valid_tag = True
+            else:
+                print "These are the valid inputs:"
+                for i in range(len(labels)):
+                    print i, ": ", valid_input_tags[str(i)]
+        token_label = labels[int(user_input_tag)]
+        sequence_labels.append((token, token_label))
+    return sequence_labels
 
 
-def appendListToXMLfile(addr_list, filepath):
 
-    if os.path.isfile(filepath):
-        with open( filepath, 'r+' ) as f:
-            tree = etree.parse(filepath)
-            address_collection = tree.getroot()
-            address_collection = stripFormatting(address_collection)
+if __name__ == '__main__' :
 
-    else:
-        address_collection = etree.Element('AddressCollection')
-
-
-    address_collection = appendListToXML(addr_list, address_collection)
-
-
-    with open(filepath, 'w') as f :
-        f.write(etree.tostring(address_collection, pretty_print = True)) 
-
-
-
-def list2file(addr_list, filepath):
-    file = open( filepath, 'w' )
-    for addr in addr_list:
-        file.write('"%s"\n' % addr)
-
-
-def xmlLabeler(labels, labeler) :
-
-    parser = ArgumentParser(description="Label some addresses")
+    import csv
+    from argparse import ArgumentParser
+    import unidecode
+    
+    labels = config.LABELS
+    
+    parser = ArgumentParser(description="Label some strings")
     parser.add_argument(dest="infile", 
-                        help="input csv with addresses", metavar="FILE")
+                        help="input csv", metavar="FILE")
     parser.add_argument(dest="outfile", 
-                        help="input csv with addresses", metavar="FILE")
+                        help="output csv", metavar="FILE")
+    # ******should console label automatically go to naive labeling if settings file doesnt exist?
+    parser.add_argument("-n",
+                        help="-n for naive labeling (if there isn't an existing .crfsuite settings file)", action="store_true")
     args = parser.parse_args()
 
     # Check to make sure we can write to outfile
@@ -166,18 +171,18 @@ def xmlLabeler(labels, labeler) :
                 raise ValueError("%s does not seem to be a valid xml file"
                                  % args.outfile)
 
-    
     with open(args.infile, 'rU') as infile :
         reader = csv.reader(infile)
 
-        address_strings = set([unidecode.unidecode(row[0]) for row in reader])
+        strings = set([unidecode.unidecode(row[0]) for row in reader])
 
-    tagged_addr_list, remaining_addrs = consoleLabel(address_strings, 
-                                                     labels,
-                                                     labeler) 
+    if args.n :
+        labeled_list, raw_strings_left = naiveConsoleLabel(strings, labels)
+    else:
+        labeled_list, raw_strings_left = consoleLabel(strings, labels) 
 
-    appendListToXMLfile(tagged_addr_list, args.outfile)
-    list2file(remaining_addrs, 'unlabeled.csv')
+    data_prep_utils.appendListToXMLfile(labeled_list, args.outfile)
 
-
-
+    #**** should this be hardcoded?
+    data_prep_utils.list2file(raw_strings_left, 'training/data_prep/unlabeled_data/unlabeled.csv')
+    
