@@ -3,8 +3,9 @@ import sys
 import os.path
 import data_prep_utils
 import config
+import re
 
-# ********test this
+
 def consoleLabel(raw_strings, labels): 
     print "Start console labeling!"
 
@@ -82,7 +83,7 @@ def manualTagging(preds, labels):
         else:
             xml_tag = labels[int(user_input_tag)]
 
-        tagged_sequence.append((token[0], xml_tag))
+        tagged_sequence.append((token_pred[0], xml_tag))
     return tagged_sequence
 
 
@@ -162,6 +163,8 @@ if __name__ == '__main__' :
                         help="-n for naive labeling (if there isn't an existing .crfsuite settings file)", action="store_true")
     args = parser.parse_args()
 
+    file_slug = re.sub('(.*/)|(.csv)|(unlabeled_)', '', args.infile)
+
     # Check to make sure we can write to outfile
     if os.path.isfile(args.outfile):
         with open(args.outfile, 'r+' ) as f:
@@ -183,6 +186,5 @@ if __name__ == '__main__' :
 
     data_prep_utils.appendListToXMLfile(labeled_list, args.outfile)
 
-    #**** should this be hardcoded?
-    data_prep_utils.list2file(raw_strings_left, 'training/data_prep/unlabeled_data/unlabeled.csv')
+    data_prep_utils.list2file(raw_strings_left, 'training/data_prep/unlabeled_data/unlabeled_'+file_slug+'.csv')
     
