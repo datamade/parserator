@@ -1,7 +1,8 @@
 import config
 import os
-from manual_labeling import xmlLabeler
 from training import train
+import pycrfsuite
+import warnings
 
 
 try :
@@ -9,7 +10,7 @@ try :
     path = os.path.split(os.path.abspath(__file__))[0] + '/' + config.MODEL_FILE
     TAGGER.open(path)
 except IOError :
-    warnings.warn("You must train the model (run training/training.py) and create the "+config.MODEL_FILE" file before you can use the parse and tag methods")
+    warnings.warn("You must train the model (run training/training.py) and create the "+config.MODEL_FILE+" file before you can use the parse and tag methods")
 
 
 
