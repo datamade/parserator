@@ -25,7 +25,7 @@ def trainModel(training_data, model_file,
     trainer.train(model_file)
     reload(parserator)
 
-def parseTrainingData(filepath):
+def readTrainingData(filepath):
     tree = etree.parse(filepath)
     collection = tree.getroot()
 
@@ -51,7 +51,7 @@ def get_data_sklearn_format(path='training/training_data/labeled.xml'):
                 of strings, one for each token in the corresponding training
                 sequence
     """
-    data = list(parseTrainingData(path))
+    data = list(readTrainingData(path))
     random.shuffle(data)
 
     x, y = [], []
@@ -63,7 +63,7 @@ def get_data_sklearn_format(path='training/training_data/labeled.xml'):
 
 def train(example_file, settings_file_path) :
 
-    training_data = list(parseTrainingData(example_file))
+    training_data = list(readTrainingData(example_file))
     trainModel(training_data, settings_file_path)
 
 
@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
     root_path = os.path.split(os.path.split(os.path.abspath(__file__))[0])[0]
 
-    training_data = list(parseTrainingData(root_path + '/training/training_data/' + config.TRAIN_DATA))
+    training_data = list(readTrainingData(root_path + '/training/training_data/' + config.TRAIN_DATA))
     # ********* make training & training data directory?
 
     trainModel(training_data, root_path + '/parserator/' + config.MODEL_FILE)
