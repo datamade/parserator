@@ -3,158 +3,73 @@ import os
 from training import train
 import pycrfsuite
 import warnings
+from collections import OrderedDict
 
 
-try :
-    TAGGER = pycrfsuite.Tagger()
-    path = os.path.split(os.path.abspath(__file__))[0] + '/' + config.MODEL_FILE
-    TAGGER.open(path)
-except IOError :
-    warnings.warn("You must train the model (run training/training.py) and create the "+config.MODEL_FILE+" file before you can use the parse and tag methods")
+class Parser(object):
 
+    LABELS = []
 
+    ########################################
+    ######## OPTIONAL CONFIG ###############
+    ########################################
+    NULL_LABEL = 'Null'
+    # this is the xml tag for each string in training data. example: PARENT_LABEL = 'Name'
+    PARENT_LABEL = 'TokenSequence'
+    # this is the tag for a group of strings. example: GROUP_LABEL = 'NameCollection'
+    GROUP_LABEL = 'Collection'
+    # filename for settings file
+    MODEL_FILE = 'learned_settings.crfsuite'
+    MODEL_PATH = os.path.split(os.path.abspath(__file__))[0] + '/' + MODEL_FILE
+    # filename for training data (from which the model is produced)
+    TRAINING_FILE = 'labeled.xml' ########## should this be set here?
 
-def parse(raw_string) :
+    VOWELS_Y = tuple('aeiouy')
 
-    tokens = tokenize(raw_string)
+    def __init__(self):
+        try :
+            self.TAGGER = pycrfsuite.Tagger()
+            # path = os.path.split(os.path.abspath(__file__))[0] + '/' + self.MODEL_FILE
+            self.TAGGER.open(self.MODEL_PATH)
+        except IOError :
+            warnings.warn("You must train the model (run training/training.py) and create the "+config.MODEL_FILE+" file before you can use the parse and tag methods")
 
-    if not tokens :
-        return []
+    def parse(self, raw_string):
+        tokens = self.tokenize(raw_string)
 
-    features = tokens2features(tokens)
+        if not tokens :
+            return []
 
-    tags = TAGGER.tag(features)
-    return zip(tokens, tags)
+        features = self.tokens2features(tokens)
 
+        try :
+            self.TAGGER = pycrfsuite.Tagger()
+            # path = os.path.split(os.path.abspath(__file__))[0] + '/' + self.MODEL_FILE
+            self.TAGGER.open(self.MODEL_PATH)
+        except IOError :
+            warnings.warn("You must train the model (run training/training.py) and create the "+config.MODEL_FILE+" file before you can use the parse and tag methods")
 
-def tag(raw_string) :
-    tagged = OrderedDict()
-    for token, label in parse(raw_string) :
-        tagged.setdefault(label, []).append(token)
+        tags = self.TAGGER.tag(features)
+        return zip(tokens, tags)
 
-    for token in tagged :
-        component = ' '.join(tagged[token])
-        component = component.strip(" ,;")
-        tagged[token] = component
+    def tag(self, raw_string) :
+        print "in tag"
+        tagged = OrderedDict()
+        for token, label in self.parse(raw_string) :
+            tagged.setdefault(label, []).append(token)
 
-    return tagged
+        for token in tagged :
+            component = ' '.join(tagged[token])
+            component = component.strip(" ,;")
+            tagged[token] = component
 
+        return tagged
 
-# This defines how a raw string is split into tokens, to be tagged
-def tokenize(raw_string) :
-    re_tokens = re.compile(r"""
-    \(*[^\s,;()]+[.,;)]*   # ['ab. cd,ef '] -> ['ab.', 'cd,', 'ef']
-    """,
-                           re.VERBOSE | re.UNICODE)
+    def tokenize(self, raw_string):
+        raise NotImplementedError
 
-    tokens = re_tokens.findall(raw_string)
+    def tokens2features(self, tokens):
+        raise NotImplementedError
 
-    if not tokens :
-        return []
-
-    return tokens
-
-#####################################################
-# This is where sequence-level features are defined # 
-# e.g. first token, last token, etc                 #
-#####################################################
-def tokens2features(tokens):
-    
-    feature_sequence = [config.tokenFeatures(tokens[0])]
-    previous_features = feature_sequence[-1].copy()
-
-    seen_comma = False
-
-    for token in tokens[1:] :
-        token_features = config.tokenFeatures(token) 
-
-        # # This is an example of a feature for whether a comma has been encountered in previous tokens
-        # if not seen_comma and previous_features['comma'] :
-        #     seen_comma = True
-        # if seen_comma :
-        #     token_features['seen.comma'] = True
-
-        current_features = token_features.copy()
-
-        feature_sequence[-1]['next'] = current_features
-        token_features['previous'] = previous_features        
-            
-        feature_sequence.append(token_features)
-
-        previous_features = current_features
-
-    if len(feature_sequence) > 1 :
-        feature_sequence[0]['rawstring.start'] = True
-        feature_sequence[-1]['rawstring.end'] = True
-        feature_sequence[1]['previous']['rawstring.start'] = True
-        feature_sequence[-2]['next']['rawstring.end'] = True
-
-    else : 
-        feature_sequence[0]['singleton'] = True
-
-    return feature_sequence
-
-
-
-###########################################################
-# This is where features of individual tokens are defined # 
-###########################################################
-
-VOWELS_Y = tuple('aeiouy')
-
-def tokenFeatures(token) :
-
-    if token in (u'&') :
-        token_chars = token_chars_lc = token
-        
-    else :
-        # this is the token w/o punctuation
-        token_chars = re.sub(r'(^[\W]*)|([^\w]*$)', u'', token)
-        # this is the token w/o punctuation & w/o capitalization
-        token_chars_lc = re.sub(r'\W', u'', token_chars.lower())
-
-    # below are some basic examples of feature definitions
-    features = {
-        # lowercase chars example
-        'nopunc' : token_chars_lc,
-        # word shape example
-        'case' : casing(token_chars),
-        # length example
-        'length' : len(token_chars_lc),
-        # vowels example
-        'has.vowels'  : bool(set(token_chars_lc[1:]) & set('aeiouy')),
-        # vowel ratio example
-        'more.vowels' : vowelRatio(token_chars_lc)
-                }
-
-    reversed_token = token_chars_lc[::-1]
-    for i in range(1, len(token_chars_lc)) :
-        features['prefix_%s' % i] = token_chars_lc[:i]
-        features['suffix_%s' % i] = reversed_token[:i][::-1]
-        if i > 4 :
-            break
-
-    return features
-
-# word shape feature example
-def casing(token) :
-    if token.isupper() :
-        return 'upper'
-    elif token.islower() :
-        return 'lower' 
-    elif token.istitle() :
-        return 'title'
-    elif token.isalpha() :
-        return 'mixed'
-    else :
-        return False
-
-# vowel ratio feature example
-def vowelRatio(token) :
-    n_chars = len(token)
-    if n_chars > 1:
-        n_vowels = sum(token.count(c) for c in VOWELS_Y)
-        return n_vowels/float(n_chars)
-    else :
-        return False
-
+    def tokenFeatures(self, token) :
+        raise NotImplementedError
