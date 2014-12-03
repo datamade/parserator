@@ -6,7 +6,7 @@ import config
 import re
 
 
-def consoleLabel(raw_strings, labels): 
+def consoleLabel(raw_strings, labels, parser): 
     print "Start console labeling!"
 
     valid_responses = ['y', 'n', 's', 'f', '']
@@ -24,7 +24,7 @@ def consoleLabel(raw_strings, labels):
             print "-"*50
             print "STRING: ", raw_sequence
             
-            preds = parse(raw_sequence)
+            preds = parser.parse(raw_sequence)
 
             user_input = None 
             while user_input not in valid_responses :
@@ -87,7 +87,7 @@ def manualTagging(preds, labels):
     return tagged_sequence
 
 
-def naiveConsoleLabel(raw_strings, labels): 
+def naiveConsoleLabel(raw_strings, labels, parser): 
     print "Start console labeling!"
 
     valid_responses = ['t', 's', 'f', '']
@@ -104,7 +104,7 @@ def naiveConsoleLabel(raw_strings, labels):
             print "-"*50
             print "STRING: ", raw_sequence
             
-            tokens = tokenize(raw_sequence)
+            tokens = parser.tokenize(raw_sequence)
 
             user_input = None 
             while user_input not in valid_responses :
@@ -143,48 +143,3 @@ def naiveManualTag(raw_sequence, labels):
         sequence_labels.append((token, token_label))
     return sequence_labels
 
-
-
-if __name__ == '__main__' :
-
-    import csv
-    from argparse import ArgumentParser
-    import unidecode
-    
-    labels = config.LABELS
-    
-    parser = ArgumentParser(description="Label some strings")
-    parser.add_argument(dest="infile", 
-                        help="input csv", metavar="FILE")
-    parser.add_argument(dest="outfile", 
-                        help="output csv", metavar="FILE")
-    # ******should console label automatically go to naive labeling if settings file doesnt exist?
-    parser.add_argument("-n",
-                        help="-n for naive labeling (if there isn't an existing .crfsuite settings file)", action="store_true")
-    args = parser.parse_args()
-
-    file_slug = re.sub('(.*/)|(.csv)|(unlabeled_)', '', args.infile)
-
-    # Check to make sure we can write to outfile
-    if os.path.isfile(args.outfile):
-        with open(args.outfile, 'r+' ) as f:
-            try :
-                tree = etree.parse(f)
-            except :
-                raise ValueError("%s does not seem to be a valid xml file"
-                                 % args.outfile)
-
-    with open(args.infile, 'rU') as infile :
-        reader = csv.reader(infile)
-
-        strings = set([unidecode.unidecode(row[0]) for row in reader])
-
-    if args.n :
-        labeled_list, raw_strings_left = naiveConsoleLabel(strings, labels)
-    else:
-        labeled_list, raw_strings_left = consoleLabel(strings, labels) 
-
-    data_prep_utils.appendListToXMLfile(labeled_list, args.outfile)
-
-    data_prep_utils.list2file(raw_strings_left, 'training/data_prep/unlabeled_data/unlabeled_'+file_slug+'.csv')
-    
