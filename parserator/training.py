@@ -6,7 +6,7 @@ from imp import reload
 import config
 
 
-def trainModel(training_data, model_file,
+def trainModel(training_data, model_file, parser,
                params_to_set={'c1':0.1, 'c2':0.01, 'feature.minfreq':0}):
 
     X = []
@@ -14,7 +14,7 @@ def trainModel(training_data, model_file,
 
     for raw_string, components in training_data:
         tokens, labels = zip(*components)
-        X.append(tokens2features(tokens))
+        X.append(parser.tokens2features(tokens))
         Y.append(labels)
 
     # train model
@@ -23,7 +23,6 @@ def trainModel(training_data, model_file,
         trainer.append(xseq, yseq)
 
     trainer.train(model_file)
-    reload(parserator)
 
 def readTrainingData(filepath):
     tree = etree.parse(filepath)
