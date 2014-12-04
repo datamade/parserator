@@ -159,7 +159,14 @@ def getArgumentParser():
 
 
 
-def label(p, args, unlabeled_dir):
+def label(p, unlabeled_dir):
+
+    parser = ArgumentParser(description="Label some addresses")
+    parser.add_argument(dest="infile",
+                        help="input csv with addresses", metavar="FILE")
+    parser.add_argument(dest="outfile",
+                        help="input csv with addresses", metavar="FILE")
+    args = parser.parse_args()
 
     file_slug = re.sub('(.*/)|(.csv)|(unlabeled_)', '', args.infile)
 
