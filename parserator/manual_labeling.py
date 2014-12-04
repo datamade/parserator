@@ -159,38 +159,31 @@ def getArgumentParser():
 
 
 
-def label(p, unlabeled_dir):
+def label(p, infile, outfile):
 
-    parser = ArgumentParser(description="Label some addresses")
-    parser.add_argument(dest="infile",
-                        help="input csv with addresses", metavar="FILE")
-    parser.add_argument(dest="outfile",
-                        help="input csv with addresses", metavar="FILE")
-    args = parser.parse_args()
-
-    file_slug = re.sub('(.*/)|(.csv)|(unlabeled_)', '', args.infile)
+    file_slug = re.sub('(.*/)|(.csv)|(unlabeled_)', '', infile)
 
     # Check to make sure we can write to outfile
-    if os.path.isfile(args.outfile):
-        with open(args.outfile, 'r+' ) as f:
+    if os.path.isfile(outfile):
+        with open(outfile, 'r+' ) as f:
             try :
                 tree = etree.parse(f)
             except :
                 raise ValueError("%s does not seem to be a valid xml file"
-                                 % args.outfile)
+                                 % outfile)
 
-    with open(args.infile, 'rU') as infile :
-        reader = csv.reader(infile)
+    with open(infile, 'rU') as f :
+        reader = csv.reader(f)
 
         strings = set([unidecode.unidecode(row[0]) for row in reader])
 
     labels = p.LABELS
 
-    if args.n :
-        labeled_list, raw_strings_left = naiveConsoleLabel(strings, labels, p)
-    else:
+    try:
         labeled_list, raw_strings_left = consoleLabel(strings, labels, p) 
+    except IOError:
+        labeled_list, raw_strings_left = naiveConsoleLabel(strings, labels, p)
 
-    data_prep_utils.appendListToXMLfile(labeled_list, p, args.outfile)
-    data_prep_utils.list2file(raw_strings_left, unlabeled_dir+'unlabeled_'+file_slug+'.csv')
+    data_prep_utils.appendListToXMLfile(labeled_list, p, outfile)
+    data_prep_utils.list2file(raw_strings_left, p.UNLABELED_DATA_DIR+'/unlabeled_'+file_slug+'.csv')
 
