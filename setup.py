@@ -26,4 +26,9 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Information Analysis'],
+    entry_points={
+        'console_scripts': [
+            'parserator = parserator.main:dispatch',
+        ]
+    }
 )
