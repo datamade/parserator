@@ -6,7 +6,7 @@ from imp import reload
 import config
 
 
-def trainModel(training_data, model_file, parser,
+def trainModel(training_data, parser,
                params_to_set={'c1':0.1, 'c2':0.01, 'feature.minfreq':0}):
 
     X = []
@@ -22,7 +22,7 @@ def trainModel(training_data, model_file, parser,
     for xseq, yseq in zip(X, Y):
         trainer.append(xseq, yseq)
 
-    trainer.train(model_file)
+    trainer.train(parser.MODEL_PATH)
 
 def readTrainingData(filepath):
     tree = etree.parse(filepath)
@@ -60,10 +60,13 @@ def get_data_sklearn_format(path='training/training_data/labeled.xml'):
         y.append(labels)
     return x, y
 
-def train(example_file, settings_file_path) :
 
-    training_data = list(readTrainingData(example_file))
-    trainModel(training_data, settings_file_path)
+def train(parser) :
+
+    train_data_filepath = parser.TRAINING_DATA_DIR + '/' + parser.TRAINING_FILE
+    training_data = list(readTrainingData(train_data_filepath))
+
+    trainModel(training_data, parser)
 
 
 
@@ -72,6 +75,5 @@ if __name__ == '__main__':
     root_path = os.path.split(os.path.split(os.path.abspath(__file__))[0])[0]
 
     training_data = list(readTrainingData(root_path + '/training/training_data/' + config.TRAIN_DATA))
-    # ********* make training & training data directory?
 
     trainModel(training_data, root_path + '/parserator/' + config.MODEL_FILE)
