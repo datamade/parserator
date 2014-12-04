@@ -4,6 +4,9 @@ import os.path
 import data_prep_utils
 import config
 import re
+import csv
+from argparse import ArgumentParser
+import unidecode
 
 
 def consoleLabel(raw_strings, labels, parser): 
@@ -142,4 +145,45 @@ def naiveManualTag(raw_sequence, labels):
         token_label = labels[int(user_input_tag)]
         sequence_labels.append((token, token_label))
     return sequence_labels
+
+
+def getArgumentParser():
+    arg_parser = ArgumentParser(description="Label some strings")
+    arg_parser.add_argument(dest="infile", 
+                            help="input csv", metavar="FILE")
+    arg_parser.add_argument(dest="outfile", 
+                            help="output csv", metavar="FILE")
+    arg_parser.add_argument("-n",
+                            help="-n for naive labeling (if there isn't an existing .crfsuite settings file)", action="store_true")
+    return arg_parser
+
+
+
+def label(p, args, unlabeled_dir):
+
+    file_slug = re.sub('(.*/)|(.csv)|(unlabeled_)', '', args.infile)
+
+    # Check to make sure we can write to outfile
+    if os.path.isfile(args.outfile):
+        with open(args.outfile, 'r+' ) as f:
+            try :
+                tree = etree.parse(f)
+            except :
+                raise ValueError("%s does not seem to be a valid xml file"
+                                 % args.outfile)
+
+    with open(args.infile, 'rU') as infile :
+        reader = csv.reader(infile)
+
+        strings = set([unidecode.unidecode(row[0]) for row in reader])
+
+    labels = p.LABELS
+
+    if args.n :
+        labeled_list, raw_strings_left = naiveConsoleLabel(strings, labels, p)
+    else:
+        labeled_list, raw_strings_left = consoleLabel(strings, labels, p) 
+
+    data_prep_utils.appendListToXMLfile(labeled_list, p, args.outfile)
+    data_prep_utils.list2file(raw_strings_left, unlabeled_dir+'unlabeled_'+file_slug+'.csv')
 

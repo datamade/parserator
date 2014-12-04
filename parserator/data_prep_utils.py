@@ -1,11 +1,10 @@
-import config
 from lxml import etree
 import os
 
 
 # appends a labeled list to an existing xml file
 # calls: appendListToXML, stripFormatting
-def appendListToXMLfile(labeled_list, filepath):
+def appendListToXMLfile(labeled_list, p, filepath):
     # format for labeled_list:      [   [ (token, label), (token, label), ...],
     #                                   [ (token, label), (token, label), ...],
     #                                   [ (token, label), (token, label), ...],
@@ -18,10 +17,11 @@ def appendListToXMLfile(labeled_list, filepath):
             collection_XML = stripFormatting(collection_XML)
 
     else:
-        collection_tag = config.GROUP_LABEL
+        collection_tag = p.GROUP_LABEL
         collection_XML = etree.Element(collection_tag)
 
-    collection_XML = appendListToXML(labeled_list, collection_XML)
+    parent_tag = p.PARENT_LABEL
+    collection_XML = appendListToXML(labeled_list, collection_XML, parent_tag)
 
     with open(filepath, 'w') as f :
         f.write(etree.tostring(collection_XML, pretty_print = True)) 
@@ -31,24 +31,22 @@ def appendListToXMLfile(labeled_list, filepath):
 # appends corresponding xml to existing xml
 # calls: sequence2XML
 # called by: appendListToXMLfile
-def appendListToXML(list_to_append, collection_XML) :
+def appendListToXML(list_to_append, collection_XML, parent_tag) :
     # format for list_to_append:    [   [ (token, label), (token, label), ...],
     #                                   [ (token, label), (token, label), ...],
     #                                   [ (token, label), (token, label), ...],
     #                                   ...           ]
-
     for labeled_sequence in list_to_append:
-        sequence_xml = sequence2XML(labeled_sequence)
+        sequence_xml = sequence2XML(labeled_sequence, parent_tag)
         collection_XML.append(sequence_xml)
     return collection_XML
 
 
 # given a labeled sequence, generates xml for that sequence
 # called by: appendListToXML
-def sequence2XML(labeled_sequence) :
+def sequence2XML(labeled_sequence, parent_tag) :
     # format for labeled_sequence:  [(token, label), (token, label), ...]
 
-    parent_tag = config.PARENT_LABEL
     sequence_xml = etree.Element(parent_tag)
 
     for token, label in labeled_sequence:
@@ -72,9 +70,9 @@ def stripFormatting(collection) :
 
 # given a list of filenames (containing xml),
 # outputs an xml file with the contents of all the xml files
-def smushXML( xml_infile_list, xml_outfile ):
+def smushXML( xml_infile_list, xml_outfile, p ):
 
-    collection_tag = name_parser.config.GROUP_LABEL
+    collection_tag = p.GROUP_LABEL
     full_xml = etree.Element(collection_tag)
     component_string_list = []
 
