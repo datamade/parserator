@@ -74,18 +74,27 @@ def stripFormatting(collection) :
 # outputs an xml file with the contents of all the xml files
 def smushXML( xml_infile_list, xml_outfile ):
 
-    collection_tag = config.GROUP_LABEL
+    collection_tag = name_parser.config.GROUP_LABEL
     full_xml = etree.Element(collection_tag)
+    component_string_list = []
 
     for xml_infile in xml_infile_list:
         if os.path.isfile(xml_infile):
             with open( xml_infile, 'r+' ) as f:
                 tree = etree.parse(f)
-                xml_to_add = tree.getroot()
-                xml_to_add = stripFormatting(xml_to_add)
-                full_xml.extend(xml_to_add)
+                file_xml = tree.getroot()
+                file_xml = stripFormatting(file_xml)
+                for component_etree in file_xml:
+                    # etree components to string representations
+                    component_string_list.append(etree.tostring(component_etree))
         else:
             print "WARNING: %s does not exist" % xml_infile
+    # get rid of duplicates in string representations
+    component_string_list = list(set(component_string_list))
+    # unique string representations back to etree
+    for component_string in component_string_list:
+        xml = etree.fromstring(component_string)
+        full_xml.append(xml)
 
     with open( xml_outfile, 'w' ) as f:
         f.write( etree.tostring(full_xml, pretty_print = True) )
