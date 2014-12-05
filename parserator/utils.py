@@ -4,7 +4,6 @@ from sklearn.base import BaseEstimator
 from sklearn.grid_search import GridSearchCV
 from training import get_data_sklearn_format
 import pycrfsuite
-import config
 
 
 def f1_with_flattening(estimator, X, y):

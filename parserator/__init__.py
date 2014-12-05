@@ -1,4 +1,3 @@
-import config
 import os
 from training import train
 import pycrfsuite
@@ -73,3 +72,4 @@ class Parser(object):
 
     def tokenFeatures(self, token) :
         raise NotImplementedError
+

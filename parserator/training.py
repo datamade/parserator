@@ -3,7 +3,6 @@ import random
 import os
 from lxml import etree
 from imp import reload
-import config
 
 
 def trainModel(training_data, parser,

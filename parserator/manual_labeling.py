@@ -2,7 +2,6 @@ from lxml import etree
 import sys
 import os.path
 import data_prep_utils
-import config
 import re
 import csv
 from argparse import ArgumentParser
