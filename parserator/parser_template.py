@@ -1,4 +1,9 @@
-import config
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+def template():
+
+    return """\
 import os
 from training import train
 import pycrfsuite
@@ -33,7 +38,7 @@ class Parser(object):
             self.TAGGER = pycrfsuite.Tagger()
             self.TAGGER.open(self.MODEL_PATH)
         except IOError :
-            warnings.warn("You must train the model (run parserator train MODULENAME) and create the "+config.MODEL_FILE+" file before you can use the parse and tag methods")
+            warnings.warn('You must train the model (run parserator train MODULENAME) and create the '+self.MODEL_FILE+' file before you can use the parse and tag methods')
 
     def parse(self, raw_string):
         tokens = self.tokenize(raw_string)
@@ -47,20 +52,19 @@ class Parser(object):
             self.TAGGER = pycrfsuite.Tagger()
             self.TAGGER.open(self.MODEL_PATH)
         except IOError :
-            warnings.warn("You must train the model (run parserator train MODULENAME) and create the "+config.MODEL_FILE+" file before you can use the parse and tag methods")
+            warnings.warn('You must train the model (run parserator train MODULENAME) and create the '+self.MODEL_FILE+' file before you can use the parse and tag methods')
 
         tags = self.TAGGER.tag(features)
         return zip(tokens, tags)
 
     def tag(self, raw_string) :
-        print "in tag"
         tagged = OrderedDict()
         for token, label in self.parse(raw_string) :
             tagged.setdefault(label, []).append(token)
 
         for token in tagged :
             component = ' '.join(tagged[token])
-            component = component.strip(" ,;")
+            component = component.strip(\" ,;\")
             tagged[token] = component
 
         return tagged
@@ -145,3 +149,4 @@ class Parser(object):
             return 'mixed'
         else :
             return False
+"""
