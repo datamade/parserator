@@ -4,6 +4,7 @@ import training
 import os
 import shutil
 import fileinput
+from parser_template import template
 
 
 def dispatch():
@@ -19,8 +20,6 @@ def dispatch():
                         help="module name for a new parser")
     args = parser.parse_args()
 
-
-    
 
     if args.command == 'label':
         if args.infile and args.outfile:
@@ -56,7 +55,9 @@ def dispatch():
         if os.path.exists(init_path):
             print "  warning:", init_path, "already exists"
         else:
-            shutil.copyfile("parserator/parser_template.txt", init_path)
+            with open(init_path, "w") as f:
+                f.write(template())
+
             for line in fileinput.input(init_path, inplace=True):
                 print(line.replace('MODULENAME', name).rstrip())
             print "* ", init_path
