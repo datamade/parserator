@@ -23,7 +23,7 @@ def trainModel(training_data, parser,
 
     trainer.train(parser.MODEL_PATH)
 
-def readTrainingData(filepath):
+def readTrainingData(filepath, null_label):
     tree = etree.parse(filepath)
     collection = tree.getroot()
 
@@ -34,7 +34,7 @@ def readTrainingData(filepath):
         for component in list(sequence):
             sequence_components.append([component.text, component.tag])
             if component.tail and component.tail.strip():
-                sequence_components.append([component.tail.strip(), config.NULL_TAG])
+                sequence_components.append([component.tail.strip(), null_label])
 
         yield raw_text, sequence_components
 
@@ -63,16 +63,6 @@ def get_data_sklearn_format(path='training/training_data/labeled.xml'):
 def train(parser) :
 
     train_data_filepath = parser.TRAINING_DATA_DIR + '/' + parser.TRAINING_FILE
-    training_data = list(readTrainingData(train_data_filepath))
+    training_data = list(readTrainingData(train_data_filepath, parser.NULL_LABEL))
 
     trainModel(training_data, parser)
-
-
-
-if __name__ == '__main__':
-
-    root_path = os.path.split(os.path.split(os.path.abspath(__file__))[0])[0]
-
-    training_data = list(readTrainingData(root_path + '/training/training_data/' + config.TRAIN_DATA))
-
-    trainModel(training_data, root_path + '/parserator/' + config.MODEL_FILE)
