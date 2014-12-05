@@ -11,11 +11,11 @@ A neat thing about a probabilistic approach (as opposed to a rule-based approach
 Here's an example of an [address parser](https://github.com/datamade/usaddress) and a [name parser](https://github.com/datamade/name-parser).
 
 ### How to make a parser
-1. Initialize a new parser
-```
-pip install parserator
-parserator init [YOUR PARSER NAME]
-```
+1. Initialize a new parser  
+    ```
+    pip install parserator  
+    parserator init [YOUR PARSER NAME]  
+    ```
 2. Configure the parser to your domain
     * configure labels
     * configure tokenizer
