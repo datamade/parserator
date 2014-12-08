@@ -29,6 +29,27 @@ def f1_with_flattening(estimator, X, y):
     return f1_score(flat_gold, flat_pred)
 
 
+def get_data_sklearn_format(train_file_list, p):
+    """
+    Parses the specified data files and returns it in sklearn format.
+    :param path:
+    :return: tuple of:
+                1) list of training sequences, each of which is a string
+                2) list of gold standard labels, each of which is a tuple
+                of strings, one for each token in the corresponding training
+                sequence
+    """
+    data = list(readTrainingData(train_file_list, p))
+    random.shuffle(data)
+
+    x, y = [], []
+    for raw_string, components in data:
+        tokens, labels = zip(*components)
+        x.append(raw_string)
+        y.append(labels)
+    return x, y
+
+
 class SequenceEstimator(BaseEstimator):
     """
     A sklearn-compatible wrapper for a parser trainer

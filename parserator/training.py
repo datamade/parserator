@@ -60,26 +60,6 @@ def readTrainingData( xml_infile_list, p ):
 
         yield raw_text, sequence_components
 
-def get_data_sklearn_format(path='training/training_data/labeled.xml'):
-    """
-    Parses the specified data file and returns it in sklearn format.
-    :param path:
-    :return: tuple of:
-                1) list of training sequences, each of which is a string
-                2) list of gold standard labels, each of which is a tuple
-                of strings, one for each token in the corresponding training
-                sequence
-    """
-    data = list(readTrainingData(path))
-    random.shuffle(data)
-
-    x, y = [], []
-    for raw_string, components in data:
-        tokens, labels = zip(*components)
-        x.append(raw_string)
-        y.append(labels)
-    return x, y
-
 
 def train(parser, train_file_list) :
 
