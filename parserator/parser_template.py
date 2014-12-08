@@ -9,9 +9,10 @@ from training import train
 import pycrfsuite
 import warnings
 from collections import OrderedDict
+import parserator
 
 
-class Parser(object):
+class Parser(parserator.Parser):
 
     #  _____________________
     # |1. CONFIGURE LABELS! |
@@ -31,42 +32,6 @@ class Parser(object):
     # MODEL_FILE    = [filename for the crfsuite settings file]  default: 'learned_settings.crfsuite'
     # MODEL_PATH    = [path for the crfsuite settings file]      default: os.path.split(os.path.abspath(__file__))[0] + '/' + MODEL_FILE
     #************************************************************************************
-
-    def __init__(self):
-        try :
-            self.TAGGER = pycrfsuite.Tagger()
-            self.TAGGER.open(self.MODEL_PATH)
-        except IOError :
-            warnings.warn('You must train the model (parserator train --trainfile FILES) to create the %s file before you can use the parse and tag methods' %self.MODEL_FILE)
-
-    def parse(self, raw_string):
-        tokens = self.tokenize(raw_string)
-
-        if not tokens :
-            return []
-
-        features = self.tokens2features(tokens)
-
-        try :
-            self.TAGGER = pycrfsuite.Tagger()
-            self.TAGGER.open(self.MODEL_PATH)
-        except IOError :
-            warnings.warn('You must train the model (parserator train --trainfile FILES) to create the %s file before you can use the parse and tag methods' %self.MODEL_FILE)
-
-        tags = self.TAGGER.tag(features)
-        return zip(tokens, tags)
-
-    def tag(self, raw_string) :
-        tagged = OrderedDict()
-        for token, label in self.parse(raw_string) :
-            tagged.setdefault(label, []).append(token)
-
-        for token in tagged :
-            component = ' '.join(tagged[token])
-            component = component.strip(\" ,;\")
-            tagged[token] = component
-
-        return tagged
 
     #  _____________________
     # |2. CONFIGURE TOKENS! |
