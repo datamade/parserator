@@ -18,9 +18,6 @@ from collections import OrderedDict
 #     / 　 づ
 LABELS = [] # The labels should be a list of strings
 
-TRAINING_DATA_DIR = os.path.split(os.path.abspath(__file__))[0] + '/../MODULENAME_data/labeled_xml'
-UNLABELED_DATA_DIR = os.path.split(os.path.abspath(__file__))[0] + '/../MODULENAME_data/unlabeled'
-
 #***************** OPTIONAL CONFIG ***************************************************
 # PARENT_LABEL  = [the XML tag for each labeled string]      default: 'TokenSequence'
 # GROUP_LABEL   = [the XML tag for a group of strings]       default: 'Collection'

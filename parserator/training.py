@@ -25,7 +25,7 @@ def trainModel(training_data, m,
     trainer.train(m.MODEL_PATH)
 
 
-# given a list of xml training files (in TRAINING_DATA_DIR) & a parser module,
+# given a list of xml training filepaths & a parser module,
 # reads the xml & returns training data (for trainModel)
 def readTrainingData( xml_infile_list, m ):
 
@@ -35,7 +35,7 @@ def readTrainingData( xml_infile_list, m ):
 
     # loop through xml training files
     for xml_infile in xml_infile_list:
-        train_data_filepath = m.TRAINING_DATA_DIR + '/' + xml_infile
+        train_data_filepath = xml_infile
         if os.path.isfile(train_data_filepath):
             with open( train_data_filepath, 'r+' ) as f:
                 tree = etree.parse(f)

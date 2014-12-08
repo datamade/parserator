@@ -161,6 +161,7 @@ def getArgumentParser():
 def label(m, infile, outfile):
 
     file_slug = re.sub('(.*/)|(.csv)|(unlabeled_)', '', infile)
+    unlabeled_dir = re.sub('[^/]+$', '', infile)
 
     # Check to make sure we can write to outfile
     if os.path.isfile(outfile):
@@ -184,5 +185,5 @@ def label(m, infile, outfile):
         labeled_list, raw_strings_left = naiveConsoleLabel(strings, labels, m)
 
     data_prep_utils.appendListToXMLfile(labeled_list, m, outfile)
-    data_prep_utils.list2file(raw_strings_left, m.UNLABELED_DATA_DIR+'/unlabeled_'+file_slug+'.csv')
+    data_prep_utils.list2file(raw_strings_left, unlabeled_dir+'unlabeled_'+file_slug+'.csv')
 

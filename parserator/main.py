@@ -13,21 +13,21 @@ def dispatch():
     parser.add_argument(dest="command", help="init, label, or train")
     parser.add_argument(dest='module_name')
     parser.add_argument("--infile",
-                        help="input csv for the label task", metavar="FILE")
+                        help="input csv filepath for the label task", metavar="FILEPATH")
     parser.add_argument("--outfile",
-                        help="output xml for the label task", metavar="FILE")
+                        help="output xml filepath for the label task", metavar="FILEPATH")
     parser.add_argument("--name",
                         help="module name for a new parser")
     parser.add_argument("--traindata",
-                        help="comma separated xml files in the training data directory", metavar="FILE")
+                        help="comma separated xml filepaths", metavar="FILEPATH")
     args = parser.parse_args()
 
 
     if args.command == 'label':
         if args.infile and args.outfile:
             m = __import__(args.module_name, ["Parser"])
-            infile_path = m.UNLABELED_DATA_DIR + '/' + args.infile
-            outfile_path = m.TRAINING_DATA_DIR + '/' + args.outfile
+            infile_path = args.infile
+            outfile_path = args.outfile
             manual_labeling.label(m, infile_path, outfile_path)
         else:
             print 'Please specify an input csv file [--infile FILE] and an output xml file [--outfile FILE]'
