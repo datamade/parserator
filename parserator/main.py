@@ -26,10 +26,9 @@ def dispatch():
     if args.command == 'label':
         if args.infile and args.outfile:
             m = __import__(args.module_name, ["Parser"])
-            p = m.Parser()
-            infile_path = p.UNLABELED_DATA_DIR + '/' + args.infile
-            outfile_path = p.TRAINING_DATA_DIR + '/' + args.outfile
-            manual_labeling.label(p, infile_path, outfile_path)
+            infile_path = m.UNLABELED_DATA_DIR + '/' + args.infile
+            outfile_path = m.TRAINING_DATA_DIR + '/' + args.outfile
+            manual_labeling.label(m, infile_path, outfile_path)
         else:
             print 'Please specify an input csv file [--infile FILE] and an output xml file [--outfile FILE]'
 
@@ -37,9 +36,8 @@ def dispatch():
         if args.traindata:
             train_file_list = args.traindata.split(',')
             m = __import__(args.module_name, ["Parser"])
-            p = m.Parser()
 
-            training.train(p, train_file_list)
+            training.train(m, train_file_list)
         else:
             print 'Please specify one or more xml training files (comma separated) [--trainfile FILE]'
 

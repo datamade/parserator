@@ -4,7 +4,7 @@ import os
 
 # appends a labeled list to an existing xml file
 # calls: appendListToXML, stripFormatting
-def appendListToXMLfile(labeled_list, p, filepath):
+def appendListToXMLfile(labeled_list, m, filepath):
     # format for labeled_list:      [   [ (token, label), (token, label), ...],
     #                                   [ (token, label), (token, label), ...],
     #                                   [ (token, label), (token, label), ...],
@@ -17,10 +17,10 @@ def appendListToXMLfile(labeled_list, p, filepath):
             collection_XML = stripFormatting(collection_XML)
 
     else:
-        collection_tag = p.GROUP_LABEL
+        collection_tag = m.GROUP_LABEL
         collection_XML = etree.Element(collection_tag)
 
-    parent_tag = p.PARENT_LABEL
+    parent_tag = m.PARENT_LABEL
     collection_XML = appendListToXML(labeled_list, collection_XML, parent_tag)
 
     with open(filepath, 'w') as f :

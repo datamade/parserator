@@ -6,7 +6,7 @@ from imp import reload
 import data_prep_utils
 
 
-def trainModel(training_data, parser,
+def trainModel(training_data, m,
                params_to_set={'c1':0.1, 'c2':0.01, 'feature.minfreq':0}):
 
     X = []
@@ -14,7 +14,7 @@ def trainModel(training_data, parser,
 
     for raw_string, components in training_data:
         tokens, labels = zip(*components)
-        X.append(parser.tokens2features(tokens))
+        X.append(m.tokens2features(tokens))
         Y.append(labels)
 
     # train model
@@ -22,20 +22,20 @@ def trainModel(training_data, parser,
     for xseq, yseq in zip(X, Y):
         trainer.append(xseq, yseq)
 
-    trainer.train(parser.MODEL_PATH)
+    trainer.train(m.MODEL_PATH)
 
 
-# given a list of xml training files (in TRAINING_DATA_DIR) & a parser object,
+# given a list of xml training files (in TRAINING_DATA_DIR) & a parser module,
 # reads the xml & returns training data (for trainModel)
-def readTrainingData( xml_infile_list, p ):
+def readTrainingData( xml_infile_list, m ):
 
-    collection_tag = p.GROUP_LABEL
+    collection_tag = m.GROUP_LABEL
     full_xml = etree.Element(collection_tag)
     component_string_list = []
 
     # loop through xml training files
     for xml_infile in xml_infile_list:
-        train_data_filepath = p.TRAINING_DATA_DIR + '/' + xml_infile
+        train_data_filepath = m.TRAINING_DATA_DIR + '/' + xml_infile
         if os.path.isfile(train_data_filepath):
             with open( train_data_filepath, 'r+' ) as f:
                 tree = etree.parse(f)
@@ -61,10 +61,10 @@ def readTrainingData( xml_infile_list, p ):
         yield raw_text, sequence_components
 
 
-def train(parser, train_file_list) :
+def train(m, train_file_list) :
 
-    training_data = list(readTrainingData(train_file_list, parser))
+    training_data = list(readTrainingData(train_file_list, m))
     print 'training model on %s training examples' %len(training_data)
 
-    trainModel(training_data, parser)
+    trainModel(training_data, m)
     print 'done training!'
