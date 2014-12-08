@@ -30,7 +30,6 @@ class Parser(object):
     # NULL_LABEL    = [the null XML tag]                         default: 'Null'
     # MODEL_FILE    = [filename for the crfsuite settings file]  default: 'learned_settings.crfsuite'
     # MODEL_PATH    = [path for the crfsuite settings file]      default: os.path.split(os.path.abspath(__file__))[0] + '/' + MODEL_FILE
-    # TRAINING_FILE = [the filename for labeled training data]   default: 'labeled.xml'
     #************************************************************************************
 
     def __init__(self):

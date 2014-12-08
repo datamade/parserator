@@ -14,14 +14,10 @@ class Parser(object):
     GROUP_LABEL = 'Collection' # default tag for a group of strings
     MODEL_FILE = 'learned_settings.crfsuite' # default settings file
     MODEL_PATH = os.path.split(os.path.abspath(__file__))[0] + '/' + MODEL_FILE
-    TRAINING_FILE = 'labeled.xml' ########## should this be set here?
-
-    VOWELS_Y = tuple('aeiouy')
 
     def __init__(self):
         try :
             self.TAGGER = pycrfsuite.Tagger()
-            # path = os.path.split(os.path.abspath(__file__))[0] + '/' + self.MODEL_FILE
             self.TAGGER.open(self.MODEL_PATH)
         except IOError :
             warnings.warn("You must train the model (run training/training.py) and create the "+self.MODEL_FILE+" file before you can use the parse and tag methods")
@@ -36,7 +32,6 @@ class Parser(object):
 
         try :
             self.TAGGER = pycrfsuite.Tagger()
-            # path = os.path.split(os.path.abspath(__file__))[0] + '/' + self.MODEL_FILE
             self.TAGGER.open(self.MODEL_PATH)
         except IOError :
             warnings.warn("You must train the model (run training/training.py) and create the "+self.MODEL_FILE+" file before you can use the parse and tag methods")
