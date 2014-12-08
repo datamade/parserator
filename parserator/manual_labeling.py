@@ -8,7 +8,7 @@ from argparse import ArgumentParser
 import unidecode
 
 
-def consoleLabel(raw_strings, labels, m): 
+def consoleLabel(raw_strings, labels, module): 
     print 'Start console labeling!'
 
     valid_responses = ['y', 'n', 's', 'f', '']
@@ -26,7 +26,7 @@ def consoleLabel(raw_strings, labels, m):
             print '-'*50
             print 'STRING: %s' %raw_sequence
             
-            preds = m.parse(raw_sequence)
+            preds = module.parse(raw_sequence)
 
             user_input = None 
             while user_input not in valid_responses :
@@ -89,7 +89,7 @@ def manualTagging(preds, labels):
     return tagged_sequence
 
 
-def naiveConsoleLabel(raw_strings, labels, m): 
+def naiveConsoleLabel(raw_strings, labels, module): 
     print 'Start console labeling!'
 
     valid_responses = ['t', 's', 'f', '']
@@ -106,7 +106,7 @@ def naiveConsoleLabel(raw_strings, labels, m):
             print '-'*50
             print 'STRING: %s' %raw_sequence
             
-            tokens = m.tokenize(raw_sequence)
+            tokens = module.tokenize(raw_sequence)
 
             user_input = None 
             while user_input not in valid_responses :
@@ -158,7 +158,7 @@ def getArgumentParser():
 
 
 
-def label(m, infile, outfile):
+def label(module, infile, outfile):
 
     file_slug = re.sub('(.*/)|(.csv)|(unlabeled_)', '', infile)
     unlabeled_dir = re.sub('[^/]+$', '', infile)
@@ -177,13 +177,13 @@ def label(m, infile, outfile):
 
         strings = set([unidecode.unidecode(row[0]) for row in reader])
 
-    labels = m.LABELS
+    labels = module.LABELS
 
     try:
-        labeled_list, raw_strings_left = consoleLabel(strings, labels, m) 
+        labeled_list, raw_strings_left = consoleLabel(strings, labels, module) 
     except IOError:
-        labeled_list, raw_strings_left = naiveConsoleLabel(strings, labels, m)
+        labeled_list, raw_strings_left = naiveConsoleLabel(strings, labels, module)
 
-    data_prep_utils.appendListToXMLfile(labeled_list, m, outfile)
+    data_prep_utils.appendListToXMLfile(labeled_list, module, outfile)
     data_prep_utils.list2file(raw_strings_left, unlabeled_dir+'unlabeled_'+file_slug+'.csv')
 

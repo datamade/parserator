@@ -29,7 +29,7 @@ def f1_with_flattening(estimator, X, y):
     return f1_score(flat_gold, flat_pred)
 
 
-def get_data_sklearn_format(train_file_list, m):
+def get_data_sklearn_format(train_file_list, module):
     """
     Parses the specified data files and returns it in sklearn format.
     :param path:
@@ -39,7 +39,7 @@ def get_data_sklearn_format(train_file_list, m):
                 of strings, one for each token in the corresponding training
                 sequence
     """
-    data = list(readTrainingData(train_file_list, m))
+    data = list(readTrainingData(train_file_list, module))
     random.shuffle(data)
 
     x, y = [], []

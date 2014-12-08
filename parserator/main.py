@@ -25,19 +25,19 @@ def dispatch():
 
     if args.command == 'label':
         if args.infile and args.outfile:
-            m = __import__(args.module_name, ["Parser"])
+            module = __import__(args.module_name)
             infile_path = args.infile
             outfile_path = args.outfile
-            manual_labeling.label(m, infile_path, outfile_path)
+            manual_labeling.label(module, infile_path, outfile_path)
         else:
             print 'Please specify an input csv file [--infile FILE] and an output xml file [--outfile FILE]'
 
     elif args.command == 'train':
         if args.traindata:
             train_file_list = args.traindata.split(',')
-            m = __import__(args.module_name, ["Parser"])
+            module = __import__(args.module_name)
 
-            training.train(m, train_file_list)
+            training.train(module, train_file_list)
         else:
             print 'Please specify one or more xml training files (comma separated) [--trainfile FILE]'
 

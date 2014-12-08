@@ -6,7 +6,7 @@ from imp import reload
 import data_prep_utils
 
 
-def trainModel(training_data, m,
+def trainModel(training_data, module,
                params_to_set={'c1':0.1, 'c2':0.01, 'feature.minfreq':0}):
 
     X = []
@@ -14,7 +14,7 @@ def trainModel(training_data, m,
 
     for raw_string, components in training_data:
         tokens, labels = zip(*components)
-        X.append(m.tokens2features(tokens))
+        X.append(module.tokens2features(tokens))
         Y.append(labels)
 
     # train model
@@ -22,14 +22,14 @@ def trainModel(training_data, m,
     for xseq, yseq in zip(X, Y):
         trainer.append(xseq, yseq)
 
-    trainer.train(m.MODEL_PATH)
+    trainer.train(module.MODEL_PATH)
 
 
 # given a list of xml training filepaths & a parser module,
 # reads the xml & returns training data (for trainModel)
-def readTrainingData( xml_infile_list, m ):
+def readTrainingData( xml_infile_list, module ):
 
-    collection_tag = m.GROUP_LABEL
+    collection_tag = module.GROUP_LABEL
     full_xml = etree.Element(collection_tag)
     component_string_list = []
 
@@ -61,10 +61,10 @@ def readTrainingData( xml_infile_list, m ):
         yield raw_text, sequence_components
 
 
-def train(m, train_file_list) :
+def train(module, train_file_list) :
 
-    training_data = list(readTrainingData(train_file_list, m))
+    training_data = list(readTrainingData(train_file_list, module))
     print 'training model on %s training examples' %len(training_data)
 
-    trainModel(training_data, m)
+    trainModel(training_data, module)
     print 'done training!'
