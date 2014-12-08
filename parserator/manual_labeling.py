@@ -9,7 +9,7 @@ import unidecode
 
 
 def consoleLabel(raw_strings, labels, parser): 
-    print "Start console labeling!"
+    print 'Start console labeling!'
 
     valid_responses = ['y', 'n', 's', 'f', '']
     finished = False
@@ -22,9 +22,9 @@ def consoleLabel(raw_strings, labels, parser):
 
         if not finished:
 
-            print "(%s of %s)" % (i, total_strings)
-            print "-"*50
-            print "STRING: ", raw_sequence
+            print '(%s of %s)' % (i, total_strings)
+            print '-'*50
+            print 'STRING: %s' %raw_sequence
             
             preds = parser.parse(raw_sequence)
 
@@ -49,11 +49,11 @@ def consoleLabel(raw_strings, labels, parser):
 
 
                 elif user_input in ('' or 's') :
-                    print "Skipped\n"
+                    print 'Skipped\n'
                 elif user_input == 'f':
                     finished = True
 
-    print "Done! Yay!"
+    print 'Done! Yay!'
     return tagged_strings, strings_left_to_tag
 
 
@@ -70,14 +70,14 @@ def manualTagging(preds, labels):
     for token_pred in preds:
         valid_tag = False
         while not valid_tag:
-            print 'What is \''+token_pred[0]+'\' ? If '+ token_pred[1] +' hit return' #where should the tag list be printed?
+            print 'What is \'%s\' ? If %s hit return' %(token_pred[0], token_pred[1])#where should the tag list be printed?
             user_input_tag = sys.stdin.readline().strip()
             if user_input_tag in valid_input_tags or user_input_tag == '':
                 valid_tag = True
             else:
                 print 'These are the valid inputs:'
                 for i in range(len(label_options)):
-                    print i, ": ", valid_input_tags[str(i)]
+                    print '%s : %s' %(i, valid_input_tags[str(i)])
 
         xml_tag = ''
         if user_input_tag == '':
@@ -90,7 +90,7 @@ def manualTagging(preds, labels):
 
 
 def naiveConsoleLabel(raw_strings, labels, parser): 
-    print "Start console labeling!"
+    print 'Start console labeling!'
 
     valid_responses = ['t', 's', 'f', '']
     finished = False
@@ -102,9 +102,9 @@ def naiveConsoleLabel(raw_strings, labels, parser):
     for i, raw_sequence in enumerate(raw_strings, 1):
         if not finished:
 
-            print "(%s of %s)" % (i, total_strings)
-            print "-"*50
-            print "STRING: ", raw_sequence
+            print '(%s of %s)' % (i, total_strings)
+            print '-'*50
+            print 'STRING: %s' %raw_sequence
             
             tokens = parser.tokenize(raw_sequence)
 
@@ -120,11 +120,11 @@ def naiveConsoleLabel(raw_strings, labels, parser):
                     strings_left_to_tag.remove(raw_sequence)
 
                 elif user_input == 's':
-                    print "Skipped\n"
+                    print 'Skipped\n'
                 elif user_input == 'f':
                     finished = True
 
-    print "Done! Yay!"
+    print 'Done! Yay!'
     return tagged_strings, strings_left_to_tag
 
 def naiveManualTag(raw_sequence, labels):
@@ -133,14 +133,14 @@ def naiveManualTag(raw_sequence, labels):
     for token in raw_sequence:
         valid_tag = False
         while not valid_tag:
-            print 'What is \''+token+'\' ?'
+            print 'What is \'%s\' ?' %token
             user_input_tag = sys.stdin.readline().strip()
             if user_input_tag in valid_input_tags:
                 valid_tag = True
             else:
-                print "These are the valid inputs:"
+                print 'These are the valid inputs:'
                 for i in range(len(labels)):
-                    print i, ": ", valid_input_tags[str(i)]
+                    print '%s : %s' %(i, valid_input_tags[str(i)])
         token_label = labels[int(user_input_tag)]
         sequence_labels.append((token, token_label))
     return sequence_labels

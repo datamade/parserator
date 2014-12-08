@@ -31,7 +31,7 @@ def dispatch():
             outfile_path = p.TRAINING_DATA_DIR + '/' + args.outfile
             manual_labeling.label(p, infile_path, outfile_path)
         else:
-            print "Please specify an input csv file [--infile FILE] and an output xml file [--outfile FILE]"
+            print 'Please specify an input csv file [--infile FILE] and an output xml file [--outfile FILE]'
 
     elif args.command == 'train':
         if args.traindata:
@@ -41,7 +41,7 @@ def dispatch():
 
             training.train(p, train_file_list)
         else:
-            print "Please specify one or more xml training files (comma separated) [--trainfile FILE]"
+            print 'Please specify one or more xml training files (comma separated) [--trainfile FILE]'
 
     elif args.command == 'init':
         name = args.module_name
@@ -51,23 +51,23 @@ def dispatch():
 
         dirs_to_mk = [name, data, unlabeled, labeled]
 
-        print "\nInitializing directories for", name
+        print '\nInitializing directories for %s' %name
         for directory in dirs_to_mk:
             if not os.path.exists(directory):
                 os.mkdir(directory)
-                print "* ", directory
+                print '* %s' %directory
 
-        print "\nGenerating __init__.py"
-        init_path = name + "/__init__.py"
+        print '\nGenerating __init__.py'
+        init_path = name + '/__init__.py'
         if os.path.exists(init_path):
-            print "  warning:", init_path, "already exists"
+            print '  warning: %s already exists' %init_path
         else:
             with open(init_path, "w") as f:
                 f.write(template())
 
             for line in fileinput.input(init_path, inplace=True):
                 print(line.replace('MODULENAME', name).rstrip())
-            print "* ", init_path
+            print '* %s' %init_path
 
 
 

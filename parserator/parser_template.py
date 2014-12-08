@@ -37,7 +37,7 @@ class Parser(object):
             self.TAGGER = pycrfsuite.Tagger()
             self.TAGGER.open(self.MODEL_PATH)
         except IOError :
-            warnings.warn('You must train the model (run parserator train MODULENAME) and create the '+self.MODEL_FILE+' file before you can use the parse and tag methods')
+            warnings.warn('You must train the model (parserator train --trainfile FILES) to create the %s file before you can use the parse and tag methods' %self.MODEL_FILE)
 
     def parse(self, raw_string):
         tokens = self.tokenize(raw_string)
@@ -51,7 +51,7 @@ class Parser(object):
             self.TAGGER = pycrfsuite.Tagger()
             self.TAGGER.open(self.MODEL_PATH)
         except IOError :
-            warnings.warn('You must train the model (run parserator train MODULENAME) and create the '+self.MODEL_FILE+' file before you can use the parse and tag methods')
+            warnings.warn('You must train the model (parserator train --trainfile FILES) to create the %s file before you can use the parse and tag methods' %self.MODEL_FILE)
 
         tags = self.TAGGER.tag(features)
         return zip(tokens, tags)

@@ -45,7 +45,7 @@ def readTrainingData( xml_infile_list, p ):
                     # etree components to string representations
                     component_string_list.append(etree.tostring(component_etree))
         else:
-            print "WARNING: %s does not exist" % xml_infile
+            print 'WARNING: %s does not exist' % xml_infile
     # get rid of duplicates in string representations
     component_string_list = list(set(component_string_list))
 
@@ -84,7 +84,7 @@ def get_data_sklearn_format(path='training/training_data/labeled.xml'):
 def train(parser, train_file_list) :
 
     training_data = list(readTrainingData(train_file_list, parser))
-    print "training model on %s training examples" %len(training_data)
+    print 'training model on %s training examples' %len(training_data)
 
     trainModel(training_data, parser)
-    print "done training!"
+    print 'done training!'

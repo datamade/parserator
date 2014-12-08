@@ -15,8 +15,8 @@ class TestList2XML(unittest.TestCase) :
 def XMLequals(labeled_sequence, xml):
     correct_xml = '<TokenSequence>' + xml + '</TokenSequence>'
     generated_xml = etree.tostring( sequence2XML(labeled_sequence, 'TokenSequence') )
-    print "Correct:   ", correct_xml
-    print "Generated: ", generated_xml
+    print 'Correct:   %s' %correct_xml
+    print 'Generated: %s' %generated_xml
     assert correct_xml == generated_xml
 
 
