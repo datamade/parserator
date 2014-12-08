@@ -3,6 +3,7 @@ import random
 import os
 from lxml import etree
 from imp import reload
+import data_prep_utils
 
 
 def trainModel(training_data, parser,
@@ -23,21 +24,41 @@ def trainModel(training_data, parser,
 
     trainer.train(parser.MODEL_PATH)
 
-def readTrainingData(filepath, null_label):
-    tree = etree.parse(filepath)
-    collection = tree.getroot()
 
-    for sequence in collection:
+# given a list of xml training files (in TRAINING_DATA_DIR) & a parser object,
+# reads the xml & returns training data (for trainModel)
+def readTrainingData( xml_infile_list, p ):
+
+    collection_tag = p.GROUP_LABEL
+    full_xml = etree.Element(collection_tag)
+    component_string_list = []
+
+    # loop through xml training files
+    for xml_infile in xml_infile_list:
+        train_data_filepath = p.TRAINING_DATA_DIR + '/' + xml_infile
+        if os.path.isfile(train_data_filepath):
+            with open( train_data_filepath, 'r+' ) as f:
+                tree = etree.parse(f)
+                file_xml = tree.getroot()
+                file_xml = data_prep_utils.stripFormatting(file_xml)
+                for component_etree in file_xml:
+                    # etree components to string representations
+                    component_string_list.append(etree.tostring(component_etree))
+        else:
+            print "WARNING: %s does not exist" % xml_infile
+    # get rid of duplicates in string representations
+    component_string_list = list(set(component_string_list))
+
+    # loop through unique string representations
+    for component_string in component_string_list:
+        # convert string representation back to xml
+        sequence_xml = etree.fromstring(component_string)
+        raw_text = etree.tostring(sequence_xml, method='text')
         sequence_components = []
-        raw_text = etree.tostring(sequence, method='text')
-        raw_text = raw_text.replace('&#38;', '&')
-        for component in list(sequence):
+        for component in list(sequence_xml):
             sequence_components.append([component.text, component.tag])
-            if component.tail and component.tail.strip():
-                sequence_components.append([component.tail.strip(), null_label])
 
         yield raw_text, sequence_components
-
 
 def get_data_sklearn_format(path='training/training_data/labeled.xml'):
     """
@@ -60,9 +81,10 @@ def get_data_sklearn_format(path='training/training_data/labeled.xml'):
     return x, y
 
 
-def train(parser) :
+def train(parser, train_file_list) :
 
-    train_data_filepath = parser.TRAINING_DATA_DIR + '/' + parser.TRAINING_FILE
-    training_data = list(readTrainingData(train_data_filepath, parser.NULL_LABEL))
+    training_data = list(readTrainingData(train_file_list, parser))
+    print "training model on %s training examples" %len(training_data)
 
     trainModel(training_data, parser)
+    print "done training!"

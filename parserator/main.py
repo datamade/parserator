@@ -18,6 +18,8 @@ def dispatch():
                         help="output xml for the label task", metavar="FILE")
     parser.add_argument("--name",
                         help="module name for a new parser")
+    parser.add_argument("--traindata",
+                        help="comma separated xml files in the training data directory", metavar="FILE")
     args = parser.parse_args()
 
 
@@ -32,9 +34,14 @@ def dispatch():
             print "Please specify an input csv file [--infile FILE] and an output xml file [--outfile FILE]"
 
     elif args.command == 'train':
-        m = __import__(args.module_name, ["Parser"])
-        p = m.Parser()
-        training.train(p)
+        if args.traindata:
+            train_file_list = args.traindata.split(',')
+            m = __import__(args.module_name, ["Parser"])
+            p = m.Parser()
+
+            training.train(p, train_file_list)
+        else:
+            print "Please specify one or more xml training files (comma separated) [--trainfile FILE]"
 
     elif args.command == 'init':
         name = args.module_name
