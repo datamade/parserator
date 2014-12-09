@@ -182,7 +182,7 @@ setup(
 
 def test_tokenize_template(module_name):
 
-    return """/
+    return """\
 from %s import tokenize
 import unittest
 

@@ -46,7 +46,7 @@ def dispatch():
         data = args.module_name + "_data"
         unlabeled = data + '/unlabeled'
         labeled = data + '/labeled_xml'
-        tests = name + '/tests'
+        tests = 'tests'
 
         dirs_to_mk = [name, data, unlabeled, labeled, tests]
 
@@ -76,11 +76,11 @@ def dispatch():
         print '\nGenerating test file'
         token_test_path = tests+'/test_tokenizing.py'
         if os.path.exists(token_test_path):
-            print '  warning: %s already exists', %token_test_path
+            print '  warning: %s already exists' %token_test_path
         else:
             with open(token_test_path, 'w') as f:
                 f.write(test_tokenize_template(name))
-            print '* %s', %token_test_path
+            print '* %s' %token_test_path
 
 
 
