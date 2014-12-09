@@ -146,7 +146,7 @@ def casing(token) :
         return False
 """
 
-def setup_template():
+def setup_template(module_name):
 
     return """\
 try:
@@ -158,8 +158,8 @@ setup(
     version='0.1',
     url='',
     description='',
-    name='MODULENAME',
-    packages=['MODULENAME'],
+    name='%s',
+    packages=['%s'],
     license='The MIT License: http://www.opensource.org/licenses/mit-license.php',
     install_requires=['python-crfsuite>=0.7',
                       'lxml'],
@@ -178,12 +178,12 @@ setup(
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Information Analysis']
 )
-"""
+"""%(module_name, module_name)
 
-def test_tokenize_template():
+def test_tokenize_template(module_name):
 
     return """/
-from MODULENAME import tokenize
+from %s import tokenize
 import unittest
 
 class TestTokenizing(unittest.TestCase) :
@@ -198,6 +198,7 @@ class TestTokenizing(unittest.TestCase) :
         assert tokenize('foo  bar') == ['foo', 'bar']
         assert tokenize('foo bar ') == ['foo', 'bar']
         assert tokenize(' foo bar') == ['foo', 'bar']
-        
+
 if __name__ == '__main__' :
     unittest.main()    
+""" %module_name

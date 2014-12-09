@@ -63,9 +63,6 @@ def dispatch():
         else:
             with open(init_path, "w") as f:
                 f.write(init_template())
-
-            for line in fileinput.input(init_path, inplace=True):
-                print(line.replace('MODULENAME', name).rstrip())
             print '* %s' %init_path
 
         print '\nGenerating setup.py'
@@ -73,9 +70,7 @@ def dispatch():
             print '  warning: setup.py already exists'
         else:
             with open('setup.py', 'w') as f:
-                f.write(setup_template())
-            for line in fileinput.input('setup.py', inplace=True):
-                print(line.replace('MODULENAME', name).rstrip())
+                f.write(setup_template(name))
             print '* setup.py'
 
         print '\nGenerating test file'
@@ -84,9 +79,7 @@ def dispatch():
             print '  warning: %s already exists', %token_test_path
         else:
             with open(token_test_path, 'w') as f:
-                f.write(test_tokenize_template())
-            for line in fileinput.input(token_test_path, inplace=True):
-                print(line.replace('MODULENAME', name).rstrip())
+                f.write(test_tokenize_template(name))
             print '* %s', %token_test_path
 
 
