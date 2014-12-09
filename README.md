@@ -16,10 +16,24 @@ Here's an example of an [address parser](https://github.com/datamade/usaddress) 
     ```
     pip install parserator  
     parserator init [YOUR PARSER NAME]  
-    ```
+    ```  
+    This will initialize a new parser in your current directory. For example, running ```parserator init foo``` will generate the following directories and files:
+    * foo/
+      - \_\_init\_\_.py
+    * foo_data/
+      - labeled_xml/
+      - unlabeled/
+    * setup.py
+    * tests/
+      - test_tokenizing.py
 2. Configure the parser to your domain
-    * configure labels
-    * configure tokenizer
+    * configure labels  
+        - The labels (i.e. the set of possible tags for the tokens) are defined by LABELS in \_\_init\_\_.py
+    * configure tokenizer  
+        - The tokenize function in \_\_init\_\_.py determines how any given string will be split into a sequence of tokens to be tagged, via a regex pattern object. In defining the regex pattern, it's helpful to consider what characters should split tokens (e.g. should the string 'foo;bar' be one token or two) and if so, how characters should be captured in tokens (e.g. should 'foo;bar' be split into ['foo;', 'bar'] or ['foo', ';bar']  
+        - In the tests repo, there is a test file for testing the performance of the tokenize function. You can adapt it to your needs & run the test w/ ```nosetests .``` to ensure that you are splitting strings properly.
+    * optional: additional config
+        -
 3. Define features relevant to your domain
 4. Prepare training data
 5. Train your parser
