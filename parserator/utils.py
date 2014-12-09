@@ -54,7 +54,6 @@ class SequenceEstimator(BaseEstimator):
     """
     A sklearn-compatible wrapper for a parser trainer
     """
-    model_path = os.path.split(os.path.abspath(__file__))[0] + '/' + config.MODEL_FILE
 
     def __init__(self, c1=1, c2=1, feature_minfreq=0):
         """
@@ -67,7 +66,7 @@ class SequenceEstimator(BaseEstimator):
         self.c2 = c2
         self.feature_minfreq = feature_minfreq
 
-    def fit(self, X, y, **params):
+    def fit(self, X, y, **params, model_path):
         # sklearn requires parameters to be declared as fields of the estimator,
         # an we can't have a full stop there. Replace with an underscore
         params = {k.replace('_', '.'): v for k, v in self.__dict__.items()}
@@ -75,7 +74,7 @@ class SequenceEstimator(BaseEstimator):
         for raw_text, labels in zip(X, y):
             tokens = tokenize(raw_text)
             trainer.append(tokens2features(tokens), labels)
-        trainer.train(self.model_path)
+        trainer.train(model_path)
         reload(parserator)
 
     def predict(self, X):

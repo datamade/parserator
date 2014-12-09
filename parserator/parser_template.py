@@ -23,13 +23,12 @@ LABELS = [] # The labels should be a list of strings
 # GROUP_LABEL   = [the XML tag for a group of strings]       default: 'Collection'
 # NULL_LABEL    = [the null XML tag]                         default: 'Null'
 # MODEL_FILE    = [filename for the crfsuite settings file]  default: 'learned_settings.crfsuite'
-# MODEL_PATH    = [path for the crfsuite settings file]      default: os.path.split(os.path.abspath(__file__))[0] + '/' + MODEL_FILE
 #************************************************************************************
 
 def __init__():
     try :
         TAGGER = pycrfsuite.Tagger()
-        TAGGER.open(MODEL_PATH)
+        TAGGER.open(MODEL_FILE)
     except IOError :
         warnings.warn('You must train the model (parserator train --trainfile FILES) to create the %s file before you can use the parse and tag methods' %MODEL_FILE)
 
@@ -43,7 +42,7 @@ def parse(raw_string):
 
     try :
         TAGGER = pycrfsuite.Tagger()
-        TAGGER.open(MODEL_PATH)
+        TAGGER.open(MODEL_FILE)
     except IOError :
         warnings.warn('You must train the model (parserator train --trainfile FILES) to create the %s file before you can use the parse and tag methods' %MODEL_FILE)
 

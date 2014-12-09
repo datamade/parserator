@@ -22,7 +22,7 @@ def trainModel(training_data, module,
     for xseq, yseq in zip(X, Y):
         trainer.append(xseq, yseq)
 
-    trainer.train(module.MODEL_PATH)
+    trainer.train(module.MODEL_FILE)
 
 
 # given a list of xml training filepaths & a parser module,
