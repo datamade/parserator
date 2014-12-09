@@ -4,7 +4,7 @@ import training
 import os
 import shutil
 import fileinput
-from parser_template import template
+from parser_template import init_template, setup_template, test_tokenize_template
 
 
 def dispatch():
@@ -46,8 +46,9 @@ def dispatch():
         data = args.module_name + "_data"
         unlabeled = data + '/unlabeled'
         labeled = data + '/labeled_xml'
+        tests = name + '/tests'
 
-        dirs_to_mk = [name, data, unlabeled, labeled]
+        dirs_to_mk = [name, data, unlabeled, labeled, tests]
 
         print '\nInitializing directories for %s' %name
         for directory in dirs_to_mk:
@@ -61,11 +62,32 @@ def dispatch():
             print '  warning: %s already exists' %init_path
         else:
             with open(init_path, "w") as f:
-                f.write(template())
+                f.write(init_template())
 
             for line in fileinput.input(init_path, inplace=True):
                 print(line.replace('MODULENAME', name).rstrip())
             print '* %s' %init_path
+
+        print '\nGenerating setup.py'
+        if os.path.exists('setup.py'):
+            print '  warning: setup.py already exists'
+        else:
+            with open('setup.py', 'w') as f:
+                f.write(setup_template())
+            for line in fileinput.input('setup.py', inplace=True):
+                print(line.replace('MODULENAME', name).rstrip())
+            print '* setup.py'
+
+        print '\nGenerating test file'
+        token_test_path = tests+'/test_tokenizing.py'
+        if os.path.exists(token_test_path):
+            print '  warning: %s already exists', %token_test_path
+        else:
+            with open(token_test_path, 'w') as f:
+                f.write(test_tokenize_template())
+            for line in fileinput.input(token_test_path, inplace=True):
+                print(line.replace('MODULENAME', name).rstrip())
+            print '* %s', %token_test_path
 
 
 
