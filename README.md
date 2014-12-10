@@ -35,7 +35,18 @@ Here's an example of an [address parser](https://github.com/datamade/usaddress) 
     * optional: additional config
         - PARENT\_LABEL and GROUP\_LABEL are training data XML tags (see #4 for more info on the training data format). For example, the name parser has PARENT\_LABEL = 'Name' & GROUP\_LABEL = 'NameCollection'
 3. **Define features relevant to your domain**
-    * In \_\_init\_\_.py, features are defined in the tokens2features and tokenFeatures functions. Given an individual token, tokenFeatures should return features of that token - for example, a length feature and a word shape (casing) feature. Given a sequence of tokens, tokens2features should return all features for the tokens in the sequence, including positional features - for example, the features of previous/next tokens, and features for tokens that start/end a string. For examples of features in other domains, see [features for names](https://github.com/datamade/name-parser/blob/master/name_parser/__init__.py#L80-L169) and [features for U.S. addresses](https://github.com/datamade/usaddress/blob/master/usaddress/__init__.py#L48-L112).
+    * In \_\_init\_\_.py, features are defined in the tokens2features and tokenFeatures functions. Given an individual token, tokenFeatures should return features of that token - for example, a length feature and a word shape (casing) feature.
+    * Given a sequence of tokens, tokens2features should return all features for the tokens in the sequence, including positional features - for example, the features of previous/next tokens, and features for tokens that start/end a string.
+    * For examples of features in other domains, see [features for names](https://github.com/datamade/name-parser/blob/master/name_parser/__init__.py#L80-L169) and [features for U.S. addresses](https://github.com/datamade/usaddress/blob/master/usaddress/__init__.py#L48-L112).
 4. **Prepare training data**
+    * Parserator reads training data in the following XML form, where token text is wrapped in tags representing the correct label, and sequences of tokens are wrapped in a parent label (specified by PARENT\_LABEL in \_\_init\_\_.py):  
+    ```
+      <Collection>  
+        <TokenSequence><label>token</label> <label>token</label> <label>token</label></TokenSequence>  
+        <TokenSequence><label>token</label> <label>token</label></TokenSequence>  
+        <TokenSequence><label>token</label> <label>token</label> <label>token</label></TokenSequence>  
+      </Collection>
+    ```
+    * If you have labeled strings in other formats, they will need to be converted to this XML format for parserator to read the data. In data\_prep\_utils.py, there are some tools that can help you do this. For example, the sequence2XML function reads labeled sequences represented as a list of tuples and returns the analogous XML represention: [(token, label), (token, label), ...] -> <TokenSequence><label>token</label> <label>token</label> ... </TokenSequence>
 5. **Train your parser**
 6. **Repeat steps 3-5 as needed!**
