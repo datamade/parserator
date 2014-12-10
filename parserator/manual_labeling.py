@@ -9,8 +9,12 @@ import unidecode
 
 
 def consoleLabel(raw_strings, labels, module): 
-    print 'Start console labeling!'
-
+    print '\nStart console labeling!\n'
+    print 'These are the tags available for labeling:'
+    valid_input_tags = dict((str(i), label) for i, label in enumerate(labels))
+    for i in range(len(labels)):
+        print '%s : %s' %(i, valid_input_tags[str(i)])
+    print '\n\n'
     valid_responses = ['y', 'n', 's', 'f', '']
     finished = False
 
@@ -74,10 +78,12 @@ def manualTagging(preds, labels):
             user_input_tag = sys.stdin.readline().strip()
             if user_input_tag in valid_input_tags or user_input_tag == '':
                 valid_tag = True
-            else:
+            elif user_input_tag == 'help':
                 print 'These are the valid inputs:'
                 for i in range(len(label_options)):
                     print '%s : %s' %(i, valid_input_tags[str(i)])
+            else:
+                print "That is not a valid tag. Type 'help' to see the valid inputs"
 
         xml_tag = ''
         if user_input_tag == '':
@@ -90,7 +96,13 @@ def manualTagging(preds, labels):
 
 
 def naiveConsoleLabel(raw_strings, labels, module): 
-    print 'Start console labeling!'
+
+    print '\nStart console labeling!\n'
+    print 'These are the tags available for labeling:'
+    valid_input_tags = dict((str(i), label) for i, label in enumerate(labels))
+    for i in range(len(labels)):
+        print '%s : %s' %(i, valid_input_tags[str(i)])
+    print '\n\n'
 
     valid_responses = ['t', 's', 'f', '']
     finished = False
@@ -137,10 +149,13 @@ def naiveManualTag(raw_sequence, labels):
             user_input_tag = sys.stdin.readline().strip()
             if user_input_tag in valid_input_tags:
                 valid_tag = True
-            else:
+            elif user_input_tag == 'help':
                 print 'These are the valid inputs:'
                 for i in range(len(labels)):
                     print '%s : %s' %(i, valid_input_tags[str(i)])
+            else:
+                print "That is not a valid tag. Type 'help' to see the valid inputs"
+            
         token_label = labels[int(user_input_tag)]
         sequence_labels.append((token, token_label))
     return sequence_labels
