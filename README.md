@@ -53,7 +53,11 @@ Here's an example of an [address parser](https://github.com/datamade/usaddress) 
       - The outfile option should be the filepath for an xml file, where manually labeled training data will be written. If you specify an existing xml file as the outfile, the newly labeled strings will be appended at the end of the xml file.
       - When you exit a manual labeling task, any strings from the infile that were not labeled will be written to a separate csv, with 'unlabeled_' prepended to the filename, so that in the future, you can pick up where you left off.
       - Within the manual labeling task, you will be prompted with tokens to label. To label tokens, enter the number corresponding to the correct tag. To see a mapping of numbers to labels, type 'help'
-      - If the parser model (learned_settings.crfsuite) already exists, the console labeler will use it to inform the manual labeling task.
+      - If the parser model (learned_settings.crfsuite by default) already exists, the console labeler will use it to inform the manual labeling task.
       
 5. **Train your parser**
+    * To train your parser on your labeled training data, run ```parserator train [parser module name] --traindata [training data filepath]```
+    * To train the parser on more than one training training data file, separate the filepaths with a comma (no space)
+    * After training, your parser will have an updated model, in the form of a .crfsuite settings file (learned_settings.crfsuite by default)
+    * Once the settings file exists, the parse and tag methods use it to label tokens in new strings
 6. **Repeat steps 3-5 as needed!**
