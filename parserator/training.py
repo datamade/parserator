@@ -27,9 +27,8 @@ def trainModel(training_data, module,
 
 # given a list of xml training filepaths & a parser module,
 # reads the xml & returns training data (for trainModel)
-def readTrainingData( xml_infile_list, module ):
+def readTrainingData( xml_infile_list, collection_tag ):
 
-    collection_tag = module.GROUP_LABEL
     full_xml = etree.Element(collection_tag)
     component_string_list = []
 
