@@ -19,10 +19,10 @@ from collections import OrderedDict
 LABELS = [] # The labels should be a list of strings
 
 #***************** OPTIONAL CONFIG ***************************************************
-# PARENT_LABEL  = [the XML tag for each labeled string]      default: 'TokenSequence'
-# GROUP_LABEL   = [the XML tag for a group of strings]       default: 'Collection'
-# NULL_LABEL    = [the null XML tag]                         default: 'Null'
-# MODEL_FILE    = [filename for the crfsuite settings file]  default: 'learned_settings.crfsuite'
+PARENT_LABEL  = 'TokenSequence'               # the XML tag for each labeled string
+GROUP_LABEL   = 'Collection'                  # the XML tag for a group of strings
+NULL_LABEL    = 'Null'                        # the null XML tag
+MODEL_FILE    = 'learned_settings.crfsuite'   # filename for the crfsuite settings file
 #************************************************************************************
 
 def __init__():
