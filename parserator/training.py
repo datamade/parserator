@@ -62,7 +62,7 @@ def readTrainingData( xml_infile_list, collection_tag ):
 
 def train(module, train_file_list) :
 
-    training_data = list(readTrainingData(train_file_list, module))
+    training_data = list(readTrainingData(train_file_list, module.GROUP_LABEL))
     print 'training model on %s training examples' %len(training_data)
 
     trainModel(training_data, module)
