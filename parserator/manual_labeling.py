@@ -69,29 +69,27 @@ def print_table(table):
         
 
 def manualTagging(preds, labels):
-    valid_input_tags = dict( (str(i), label) for i, label in enumerate(labels))
+    label_options = dict((str(i), label) for i, label in enumerate(labels))
     tagged_sequence = []
-    for token_pred in preds:
-        valid_tag = False
-        while not valid_tag:
-            print 'What is \'%s\' ? If %s hit return' %(token_pred[0], token_pred[1])#where should the tag list be printed?
-            user_input_tag = sys.stdin.readline().strip()
-            if user_input_tag in valid_input_tags or user_input_tag == '':
-                valid_tag = True
-            elif user_input_tag == 'help':
+    for token, predicted_tag in preds:
+        while True:
+            print 'What is \'%s\' ? If %s hit return' % (token, predicted_tag)
+            user_choice = sys.stdin.readline().strip()
+            if user_choice == '' :
+                tag = predicted_tag
+                break
+            elif user_choice in label_options :
+                tag = label_options[user_choice]
+                break
+            elif user_choice == '?' :
                 print 'These are the valid inputs:'
-                for i in range(len(label_options)):
-                    print '%s : %s' %(i, valid_input_tags[str(i)])
+                for item in sorted(label_options.items(), 
+                                   key=lambda x : int(x[0])) :
+                    print '%s : %s' % (item)
             else:
-                print "That is not a valid tag. Type 'help' to see the valid inputs"
+                print "That is not a valid tag. Type '?' to see the valid inputs"
 
-        xml_tag = ''
-        if user_input_tag == '':
-            xml_tag = token_pred[1]
-        else:
-            xml_tag = labels[int(user_input_tag)]
-
-        tagged_sequence.append((token_pred[0], xml_tag))
+        tagged_sequence.append((token, tag))
     return tagged_sequence
 
 
