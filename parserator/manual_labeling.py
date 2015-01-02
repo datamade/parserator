@@ -74,7 +74,7 @@ def manualTagging(preds, labels):
     for token_pred in preds:
         valid_tag = False
         while not valid_tag:
-            print 'What is \'%s\' ? If %s hit return' %(token_pred[0], token_pred[1])#where should the tag list be printed?
+            print 'What is \'%s\' ? If %s hit return' %(token_pred[0], token_pred[1])
             user_input_tag = sys.stdin.readline().strip()
             if user_input_tag in valid_input_tags or user_input_tag == '':
                 valid_tag = True

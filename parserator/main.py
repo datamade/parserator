@@ -10,32 +10,31 @@ from parser_template import init_template, setup_template, test_tokenize_templat
 def dispatch():
 
     parser = ArgumentParser(description="")
-    parser.add_argument(dest='module_name')
-    parser.add_argument(dest="command", help="init, label, or train")
-    parser.add_argument("--infile",
-                        help="input csv filepath for the label task", metavar="FILEPATH")
-    parser.add_argument("--outfile",
-                        help="output xml filepath for the label task", metavar="FILEPATH")
-    parser.add_argument("--name",
-                        help="module name for a new parser")
-    parser.add_argument("--traindata",
-                        help="comma separated xml filepaths", metavar="FILEPATH")
+    parser_subparsers = parser.add_subparsers()
+    sub_label = parser_subparsers.add_parser('label')
+    sub_train = parser_subparsers.add_parser('train')
+    sub_init = parser_subparsers.add_parser('init')
+
+    sub_label.add_argument(dest='infile', help='input csv filepath for the label task')
+    sub_label.add_argument(dest='outfile', help='output xml filepath for the label task')
+    sub_label.add_argument(dest='modulename', help='parser module name')
+    sub_label.set_defaults(func=label)
+
+    sub_train.add_argument(dest='traindata', help='comma separated xml filepaths')
+    sub_train.add_argument(dest='modulename', help='parser module name')
+    sub_train.set_defaults(func=train)
+
+    sub_init.add_argument(dest='modulename', help='module name for a new parser')
+    sub_init.set_defaults(func=init)
+
     args = parser.parse_args()
 
-    print args.command
+    args.func(args)
 
-    if args.command == 'label':
-        label(args)
-    elif args.command == 'train':
-        train(args)
-    elif args.command == 'init':
-        init(args)
-    else :
-        print 'help'
 
 def label(args) :
     if args.infile and args.outfile:
-        module = __import__(args.module_name)
+        module = __import__(args.modulename)
         infile_path = args.infile
         outfile_path = args.outfile
         manual_labeling.label(module, infile_path, outfile_path)
@@ -46,7 +45,7 @@ def label(args) :
 def train(args) :
     if args.traindata:
         train_file_list = args.traindata.split(',')
-        module = __import__(args.module_name)
+        module = __import__(args.modulename)
         
         training.train(module, train_file_list)
     else:
@@ -54,7 +53,7 @@ def train(args) :
 
 
 def init(args) :
-    name = args.module_name
+    name = args.modulename
     data = "raw"
     training = "training"
     tests = 'tests'
