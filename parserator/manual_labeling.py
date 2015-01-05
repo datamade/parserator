@@ -192,9 +192,9 @@ def label(module, infile, outfile):
 
     labels = module.LABELS
 
-    try:
+    if module.TAGGER:
         labeled_list, raw_strings_left = consoleLabel(strings, labels, module) 
-    except IOError:
+    else:
         labeled_list, raw_strings_left = naiveConsoleLabel(strings, labels, module)
 
     data_prep_utils.appendListToXMLfile(labeled_list, module, outfile)
