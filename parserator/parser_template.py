@@ -30,7 +30,7 @@ def __init__():
         TAGGER = pycrfsuite.Tagger()
         TAGGER.open(os.path.split(os.path.abspath(__file__))[0]+'/'+MODEL_FILE)
     except IOError :
-        warnings.warn('You must train the model (parserator train --trainfile FILES) to create the %s file before you can use the parse and tag methods' %MODEL_FILE)
+        warnings.warn('You must train the model (parserator train [traindata] [modulename]) to create the %s file before you can use the parse and tag methods' %MODEL_FILE)
 
 def parse(raw_string):
     tokens = tokenize(raw_string)
@@ -44,7 +44,7 @@ def parse(raw_string):
         TAGGER = pycrfsuite.Tagger()
         TAGGER.open(os.path.split(os.path.abspath(__file__))[0]+'/'+MODEL_FILE)
     except IOError :
-        warnings.warn('You must train the model (parserator train --trainfile FILES) to create the %s file before you can use the parse and tag methods' %MODEL_FILE)
+        warnings.warn('You must train the model (parserator train [traindata] [modulename]) to create the %s file before you can use the parse and tag methods' %MODEL_FILE)
 
     tags = TAGGER.tag(features)
     return zip(tokens, tags)

@@ -48,7 +48,7 @@ Here's an example of an [address parser](https://github.com/datamade/usaddress) 
       </Collection>
     ```
     * If you have labeled strings in other formats, they will need to be converted to this XML format for parserator to read the data. In data\_prep\_utils.py, there are some tools that can help you do this. For example, the sequence2XML function reads labeled sequences represented as a list of tuples and returns the analogous XML represention: ```[(token, label), (token, label), ...]``` -> ```<TokenSequence><label>token</label> <label>token</label> ... </TokenSequence>```
-    * If you only have raw, unlabeled strings, parserator can help you manually label tokens through a command line interface. To start a manual labeling task, run ```parserator label [parser module name] --infile [raw data filepath] --outfile [output filepath]```
+    * If you only have raw, unlabeled strings, parserator can help you manually label tokens through a command line interface. To start a manual labeling task, run ```parserator label [infile] [outfile] [modulename]```
       - The infile option should be the filepath for a csv, where each line is a string
       - The outfile option should be the filepath for an xml file, where manually labeled training data will be written. If you specify an existing xml file as the outfile, the newly labeled strings will be appended at the end of the xml file.
       - When you exit a manual labeling task, any strings from the infile that were not labeled will be written to a separate csv, with 'unlabeled_' prepended to the filename, so that in the future, you can pick up where you left off.
@@ -56,7 +56,7 @@ Here's an example of an [address parser](https://github.com/datamade/usaddress) 
       - If the parser model (learned_settings.crfsuite by default) already exists, the console labeler will use it to inform the manual labeling task.
       
 5. **Train your parser**
-    * To train your parser on your labeled training data, run ```parserator train [parser module name] --traindata [training data filepath]```
+    * To train your parser on your labeled training data, run ```parserator train [traindata] [modulename]```
     * To train the parser on more than one training training data file, separate the filepaths with a comma (no space)
     * After training, your parser will have an updated model, in the form of a .crfsuite settings file (learned_settings.crfsuite by default)
     * Once the settings file exists, the parse and tag methods use it to label tokens in new strings
