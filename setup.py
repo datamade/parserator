@@ -4,7 +4,7 @@ except ImportError :
     raise ImportError("setuptools module required, please go to https://pypi.python.org/pypi/setuptools and follow the instructions for installing setuptools")
 
 setup(
-    version='0.1',
+    version='0.2',
     url='https://github.com/datamade/parserator',
     description='Create parsers',
     name='parserator',
