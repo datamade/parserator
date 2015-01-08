@@ -4,6 +4,7 @@ import os
 from lxml import etree
 from imp import reload
 import data_prep_utils
+import re
 
 
 def trainModel(training_data, module,
@@ -60,10 +61,21 @@ def readTrainingData( xml_infile_list, collection_tag ):
         yield raw_text, sequence_components
 
 
+def renameModelFiles(module):
+    print '\n'
+    for filename in os.listdir(module.__name__):
+        if filename.endswith(".crfsuite"):
+            new_filename = re.sub('.crfsuite', '_old.crfsuite', filename)
+            print "renaming: %s -> %s" %(filename, new_filename)
+            os.rename(module.__name__+'/'+filename, module.__name__+'/'+new_filename)
+
+
 def train(module, train_file_list) :
 
-    training_data = list(readTrainingData(train_file_list, module.GROUP_LABEL))
-    print 'training model on %s training examples' %len(training_data)
+    renameModelFiles(module)
 
+    training_data = list(readTrainingData(train_file_list, module.GROUP_LABEL))
+    print '\ntraining model on %s training examples from %s' %(len(training_data), train_file_list)
     trainModel(training_data, module)
-    print 'done training!'
+
+    print '\ndone training!'
