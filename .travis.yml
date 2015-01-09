@@ -5,6 +5,7 @@ language: python
 python:
   - '2.7'
 install:
+  - python setup.py install
   - pip install -r requirements.txt
 after_success: coveralls
 sudo: false
