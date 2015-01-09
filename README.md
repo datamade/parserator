@@ -1,6 +1,8 @@
 parserator
 ==========
 
+[![Build Status](https://travis-ci.org/datamade/parserator.svg?branch=master)](https://travis-ci.org/datamade/parserator)
+
 Want a domain-specific parser that learns to parse strings probabilistically? Here's a tool that will help you make one! All you need is some training data to teach the parser about its domain.
 
 ### What a parser can do
