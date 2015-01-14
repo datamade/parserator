@@ -5,6 +5,7 @@ from lxml import etree
 from imp import reload
 import data_prep_utils
 import re
+import time
 
 
 def trainModel(training_data, module,
@@ -61,21 +62,23 @@ def readTrainingData( xml_infile_list, collection_tag ):
         yield raw_text, sequence_components
 
 
-def renameModelFiles(module):
-    print '\n'
-    for filename in os.listdir(module.__name__):
-        if filename.endswith(".crfsuite"):
-            new_filename = re.sub('.crfsuite', '_old.crfsuite', filename)
-            print "renaming: %s -> %s" %(filename, new_filename)
-            os.rename(module.__name__+'/'+filename, module.__name__+'/'+new_filename)
+def renameModelFile(old_model):
+    if os.path.exists(old_model):
+        t = time.gmtime(os.path.getctime(old_model))
+        time_str = '_'+str(t.tm_year)+'_'+str(t.tm_mon)+'_'+str(t.tm_mday)+'_'+str(t.tm_hour)+str(t.tm_min)+str(t.tm_sec)
+        renamed = re.sub('.crfsuite', time_str+'.crfsuite', old_model)
+
+        print "\nrenaming old model: %s -> %s" %(old_model, renamed)
+        os.rename(old_model, renamed)
 
 
 def train(module, train_file_list) :
 
-    renameModelFiles(module)
+    model_path = module.__name__+'/'+module.MODEL_FILE
+    renameModelFile(model_path)
 
     training_data = list(readTrainingData(train_file_list, module.GROUP_LABEL))
     print '\ntraining model on %s training examples from %s' %(len(training_data), train_file_list)
     trainModel(training_data, module)
 
-    print '\ndone training!'
+    print '\ndone training! model file created: %s' %model_path
