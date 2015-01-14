@@ -74,10 +74,14 @@ def renameModelFile(old_model):
 
 def train(module, train_file_list) :
 
+    training_data = list(readTrainingData(train_file_list, module.GROUP_LABEL))
+    if not training_data:
+        print 'ERROR: No training data found. Perhaps double check your training data filepaths?'
+        return
+
     model_path = module.__name__+'/'+module.MODEL_FILE
     renameModelFile(model_path)
 
-    training_data = list(readTrainingData(train_file_list, module.GROUP_LABEL))
     print '\ntraining model on %s training examples from %s' %(len(training_data), train_file_list)
     trainModel(training_data, module)
 
