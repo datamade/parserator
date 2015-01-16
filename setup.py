@@ -16,7 +16,7 @@ setup(
     name='parserator',
     packages=['parserator'],
     license='The MIT License: http://www.opensource.org/licenses/mit-license.php',
-    install_requires=reqs
+    install_requires=reqs,
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
