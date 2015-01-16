@@ -2,13 +2,12 @@ try:
     from setuptools import setup
 except ImportError :
     raise ImportError("setuptools module required, please go to https://pypi.python.org/pypi/setuptools and follow the instructions for installing setuptools")
-from pip.req import parse_requirements
 
-# parse_requirements() returns generator of pip.req.InstallRequirement objects
-install_reqs = parse_requirements(<requirements_path>)
-
-# reqs is a list of requirement
-reqs = [str(ir.req) for ir in install_reqs]
+reqs = [
+    'lxml==3.4.1',
+    'Unidecode==0.4.17',
+    'python-crfsuite>=0.7'
+]
 
 setup(
     version='0.3',
