@@ -1,9 +1,12 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from builtins import zip
 import pycrfsuite
 import random
 import os
 from lxml import etree
 from imp import reload
-import data_prep_utils
+from . import data_prep_utils
 import re
 import time
 
@@ -15,7 +18,7 @@ def trainModel(training_data, module,
     Y = []
 
     for raw_string, components in training_data:
-        tokens, labels = zip(*components)
+        tokens, labels = list(zip(*components))
         X.append(module.tokens2features(tokens))
         Y.append(labels)
 
@@ -44,9 +47,9 @@ def readTrainingData( xml_infile_list, collection_tag ):
                 file_xml = data_prep_utils.stripFormatting(file_xml)
                 for component_etree in file_xml:
                     # etree components to string representations
-                    component_string_list.append(etree.tostring(component_etree))
+                    component_string_list.append(etree.tostring(component_etree).decode('utf-8')
         else:
-            print 'WARNING: %s does not exist' % xml_infile
+            print('WARNING: %s does not exist' % xml_infile)
     # get rid of duplicates in string representations
     component_string_list = list(set(component_string_list))
 
@@ -54,7 +57,7 @@ def readTrainingData( xml_infile_list, collection_tag ):
     for component_string in component_string_list:
         # convert string representation back to xml
         sequence_xml = etree.fromstring(component_string)
-        raw_text = etree.tostring(sequence_xml, method='text')
+        raw_text = etree.tostring(sequence_xml, method='text').decode('utf-8')
         sequence_components = []
         for component in list(sequence_xml):
             sequence_components.append([component.text, component.tag])
@@ -76,13 +79,13 @@ def train(module, train_file_list) :
 
     training_data = list(readTrainingData(train_file_list, module.GROUP_LABEL))
     if not training_data:
-        print 'ERROR: No training data found. Perhaps double check your training data filepaths?'
+        print('ERROR: No training data found. Perhaps double check your training data filepaths?')
         return
 
     model_path = module.__name__+'/'+module.MODEL_FILE
     renameModelFile(model_path)
 
-    print '\ntraining model on %s training examples from %s' %(len(training_data), train_file_list)
+    print('\ntraining model on {num} training examples from {file_list}'.format(num=len(training_data), file_list=train_file_list))
     trainModel(training_data, module)
 
-    print '\ndone training! model file created: %s' %model_path
+    print('\ndone training! model file created: {path}'.format(path=model_path))
