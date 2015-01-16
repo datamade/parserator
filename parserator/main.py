@@ -1,10 +1,12 @@
+from __future__ import print_function
+from __future__ import absolute_import
 from argparse import ArgumentParser
-import manual_labeling
-import training
+from . import manual_labeling
+from . import training
 import os
 import shutil
 import fileinput
-from parser_template import init_template, setup_template, test_tokenize_template
+from .parser_template import init_template, setup_template, test_tokenize_template
 
 
 def dispatch():
@@ -39,7 +41,7 @@ def label(args) :
         outfile_path = args.outfile
         manual_labeling.label(module, infile_path, outfile_path)
     else:
-        print 'Please specify an input csv file [--infile FILE] and an output xml file [--outfile FILE]'
+        print('Please specify an input csv file [--infile FILE] and an output xml file [--outfile FILE]')
 
 
 def train(args) :
@@ -49,7 +51,7 @@ def train(args) :
         
         training.train(module, train_file_list)
     else:
-        print 'Please specify one or more xml training files (comma separated) [--trainfile FILE]'
+        print('Please specify one or more xml training files (comma separated) [--trainfile FILE]')
 
 
 def init(args) :
@@ -60,37 +62,37 @@ def init(args) :
     
     dirs_to_mk = [name, data, training, tests]
 
-    print '\nInitializing directories for %s' %name
+    print('\nInitializing directories for %s' %name)
     for directory in dirs_to_mk:
         if not os.path.exists(directory):
             os.mkdir(directory)
-            print '* %s' %directory
+            print('* %s' %directory)
 
-    print '\nGenerating __init__.py'
+    print('\nGenerating __init__.py')
     init_path = name + '/__init__.py'
 
     if os.path.exists(init_path):
-        print '  warning: %s already exists' %init_path
+        print('  warning: %s already exists' %init_path)
     else:
         with open(init_path, "w") as f:
             f.write(init_template())
-        print '* %s' %init_path
+        print('* %s' %init_path)
 
-    print '\nGenerating setup.py'
+    print('\nGenerating setup.py')
     if os.path.exists('setup.py'):
-        print '  warning: setup.py already exists'
+        print('  warning: setup.py already exists')
     else:
         with open('setup.py', 'w') as f:
             f.write(setup_template(name))
-        print '* setup.py'
+        print('* setup.py')
 
-    print '\nGenerating test file'
+    print('\nGenerating test file')
     token_test_path = tests+'/test_tokenizing.py'
     if os.path.exists(token_test_path):
-        print '  warning: %s already exists' %token_test_path
+        print('  warning: %s already exists' %token_test_path)
     else:
         with open(token_test_path, 'w') as f:
             f.write(test_tokenize_template(name))
-        print '* %s' %token_test_path
+        print('* %s' %token_test_path)
 
 

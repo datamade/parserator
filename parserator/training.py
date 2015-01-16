@@ -1,9 +1,12 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from builtins import zip
 import pycrfsuite
 import random
 import os
 from lxml import etree
 from imp import reload
-import data_prep_utils
+from . import data_prep_utils
 import re
 
 
@@ -14,7 +17,7 @@ def trainModel(training_data, module,
     Y = []
 
     for raw_string, components in training_data:
-        tokens, labels = zip(*components)
+        tokens, labels = list(zip(*components))
         X.append(module.tokens2features(tokens))
         Y.append(labels)
 
@@ -43,9 +46,9 @@ def readTrainingData( xml_infile_list, collection_tag ):
                 file_xml = data_prep_utils.stripFormatting(file_xml)
                 for component_etree in file_xml:
                     # etree components to string representations
-                    component_string_list.append(etree.tostring(component_etree))
+                    component_string_list.append(etree.tostring(component_etree).decode('utf-8')
         else:
-            print 'WARNING: %s does not exist' % xml_infile
+            print('WARNING: %s does not exist' % xml_infile)
     # get rid of duplicates in string representations
     component_string_list = list(set(component_string_list))
 
@@ -53,7 +56,7 @@ def readTrainingData( xml_infile_list, collection_tag ):
     for component_string in component_string_list:
         # convert string representation back to xml
         sequence_xml = etree.fromstring(component_string)
-        raw_text = etree.tostring(sequence_xml, method='text')
+        raw_text = etree.tostring(sequence_xml, method='text').decode('utf-8')
         sequence_components = []
         for component in list(sequence_xml):
             sequence_components.append([component.text, component.tag])
@@ -62,11 +65,11 @@ def readTrainingData( xml_infile_list, collection_tag ):
 
 
 def renameModelFiles(module):
-    print '\n'
+    print('\n')
     for filename in os.listdir(module.__name__):
         if filename.endswith(".crfsuite"):
             new_filename = re.sub('.crfsuite', '_old.crfsuite', filename)
-            print "renaming: %s -> %s" %(filename, new_filename)
+            print("renaming: %s -> %s" %(filename, new_filename))
             os.rename(module.__name__+'/'+filename, module.__name__+'/'+new_filename)
 
 
@@ -75,7 +78,7 @@ def train(module, train_file_list) :
     renameModelFiles(module)
 
     training_data = list(readTrainingData(train_file_list, module.GROUP_LABEL))
-    print '\ntraining model on %s training examples from %s' %(len(training_data), train_file_list)
+    print('\ntraining model on %s training examples from %s' %(len(training_data), train_file_list))
     trainModel(training_data, module)
 
-    print '\ndone training!'
+    print('\ndone training!')
