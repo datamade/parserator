@@ -5,8 +5,8 @@ except ImportError :
 
 reqs = [
     'lxml==3.4.1',
-    'Unidecode==0.4.17',
-    'python-crfsuite>=0.7'
+    'python-crfsuite>=0.7',
+    'Unidecode==0.4.17'
 ]
 
 setup(
@@ -16,9 +16,7 @@ setup(
     name='parserator',
     packages=['parserator'],
     license='The MIT License: http://www.opensource.org/licenses/mit-license.php',
-    install_requires=['python-crfsuite>=0.7',
-                      'lxml',
-                      'unidecode'],
+    install_requires=reqs
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
