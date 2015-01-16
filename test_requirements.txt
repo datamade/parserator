@@ -1,5 +1,4 @@
 nose
-future
 caniusepython3
 coverage
 pylint

@@ -4,6 +4,7 @@ except ImportError :
     raise ImportError("setuptools module required, please go to https://pypi.python.org/pypi/setuptools and follow the instructions for installing setuptools")
 
 reqs = [
+    'future==0.14.3',
     'lxml==3.4.1',
     'python-crfsuite>=0.7',
     'Unidecode==0.4.17'
