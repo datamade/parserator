@@ -6,17 +6,17 @@ A toolkit for making domain-specific probabilistic parsers
 
 Want a domain-specific parser that learns to parse strings probabilistically? Here's a tool that will help you make one! All you need is some training data to teach the parser about its domain.
 
-### What a probabilistic parser can do
+## What a probabilistic parser can do
 Given a string, a parser will break it out into labeled components. The parser uses [conditional random fields](http://en.wikipedia.org/wiki/Conditional_random_field) to label components based on (1) features of the component string and (2) the order of labels.
 
 A neat thing about a probabilistic approach (as opposed to a rule-based approach) is that the parser can continually learn from new training data, and continually improve its performance.
 
-### parserator examples
+## parserator examples
 
 * [usaddress](https://github.com/datamade/usaddress) - Our first probabilistic parser and the basis for the parserator toolkit, it parses any address in the United States. [Read our blog post on how it works](http://datamade.us/blog/parsing-addresses-with-usaddress/).
 * [name-parser](https://github.com/datamade/name-parser) - Parser for romanized person names. 
 
-### How to make a parser using parserator
+## How to make a parser using parserator
 1. **Initialize a new parser**
 
     ```
@@ -67,3 +67,12 @@ A neat thing about a probabilistic approach (as opposed to a rule-based approach
     * After training, your parser will have an updated model, in the form of a .crfsuite settings file (learned_settings.crfsuite by default)
     * Once the settings file exists, the parse and tag methods use it to label tokens in new strings
 6. **Repeat steps 3-5 as needed!**
+
+## How to use your new parser
+Once you are able to create a model from training data, install your parser module. Then, you can use the ```parse``` and ```tag``` methods to process new strings. For example, to use the name-parser module:
+
+```
+>>> import name_parser  
+>>> name_parser.parse('Mr George "Gob" Bluth II')  
+[('Mr', 'PrefixMarital'), ('George', 'GivenName'), ('"Gob"', 'Nickname'), ('Bluth', 'Surname'), ('II', 'SuffixGenerational')]
+```
