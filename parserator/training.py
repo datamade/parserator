@@ -47,7 +47,7 @@ def readTrainingData( xml_infile_list, collection_tag ):
                 file_xml = data_prep_utils.stripFormatting(file_xml)
                 for component_etree in file_xml:
                     # etree components to string representations
-                    component_string_list.append(etree.tostring(component_etree).decode('utf-8')
+                    component_string_list.append(etree.tostring(component_etree).decode('utf-8'))
         else:
             print('WARNING: %s does not exist' % xml_infile)
     # get rid of duplicates in string representations
@@ -71,7 +71,7 @@ def renameModelFile(old_model):
         time_str = '_'+str(t.tm_year)+'_'+str(t.tm_mon)+'_'+str(t.tm_mday)+'_'+str(t.tm_hour)+str(t.tm_min)+str(t.tm_sec)
         renamed = re.sub('.crfsuite', time_str+'.crfsuite', old_model)
 
-        print "\nrenaming old model: %s -> %s" %(old_model, renamed)
+        print("\nrenaming old model: %s -> %s" %(old_model, renamed))
         os.rename(old_model, renamed)
 
 
