@@ -69,7 +69,7 @@ A neat thing about a probabilistic approach (as opposed to a rule-based approach
 6. **Repeat steps 3-5 as needed!**
 
 ## How to use your new parser
-Once you are able to create a model from training data, install your parser module. Then, you can use the ```parse``` and ```tag``` methods to process new strings. For example, to use the name-parser module:
+Once you are able to create a model from training data, install your parser module. Then, you can use the ```parse``` and ```tag``` methods to process new strings. For example, to use the name_parser module:
 
 ```
 >>> import name_parser  
