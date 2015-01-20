@@ -17,6 +17,7 @@ parserator |release|
 Parserator is a toolkit for making domain-specific probabilistic parsers, built on python-crfsuite. To create a parser, all you need is some training data to teach your parser about its domain.
 
 Parserator will help you:
+
 * initialize a parser module
 * create labeled training data from unlabeled strings
 * train your parser model on labeled training data
@@ -37,10 +38,12 @@ For example, in most cases, US addresses start with street number. But there are
 A neat thing about a probabilistic approach (as opposed to a rule-based approach) is that the parser can continually learn from new training data, and continually improve its performance.
 
 Some examples of existing parsers that use parserator:
+
 * usaddress - Our first probabilistic parser and the basis for the parserator toolkit, it parses any address in the United States. Read our blog post on how it works.
 * name-parser - A parser for romanized person names.
 
 Examples of other domains where a probabilistic parser can be useful:
+
 * addresses in another country
 * product names/descriptions (e.g. parsing 'Twizzlers Twists, Strawberry, 16-Ounce Bags (Pack of 6)' into brand, item, flavor, weight, etc)
 * citations
