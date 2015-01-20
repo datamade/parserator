@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# usaddress documentation build configuration file, created by
-# sphinx-quickstart on Thu Oct  2 15:12:14 2014.
+# parserator documentation build configuration file, created by
+# sphinx-quickstart on Tue Jan 20 12:22:44 2015.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -44,7 +44,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'parserator'
-copyright = u'2014, Cathy Deng, Forest Gregg'
+copyright = u'2015, Cathy Deng, Forest Gregg'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -176,7 +176,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'usaddressdoc'
+htmlhelp_basename = 'parseratordoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -241,7 +241,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'parserator', u'parserator Documentation',
-   u'Cathy Deng, Forest Gregg', 'parserator', 'A tool for creating probabilistic parsers, built on python-crfsuite',
+   u'Cathy Deng, Forest Gregg', 'parserator', 'One line description of project.',
    'Miscellaneous'),
 ]
 
