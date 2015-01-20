@@ -6,15 +6,25 @@ A toolkit for making domain-specific probabilistic parsers
 
 Want a domain-specific parser that learns to parse strings probabilistically? Here's a tool that will help you make one! All you need is some training data to teach the parser about its domain.
 
-## What a probabilistic parser can do
+## What a probabilistic parser does
 Given a string, a parser will break it out into labeled components. The parser uses [conditional random fields](http://en.wikipedia.org/wiki/Conditional_random_field) to label components based on (1) features of the component string and (2) the order of labels.
-
-A neat thing about a probabilistic approach (as opposed to a rule-based approach) is that the parser can continually learn from new training data, and continually improve its performance.
 
 ## parserator examples
 
 * [usaddress](https://github.com/datamade/usaddress) - Our first probabilistic parser and the basis for the parserator toolkit, it parses any address in the United States. [Read our blog post on how it works](http://datamade.us/blog/parsing-addresses-with-usaddress/).
 * [name-parser](https://github.com/datamade/name-parser) - Parser for romanized person names. 
+
+## When is a probabalistic parser useful?
+A probabilistic parser is particularly useful for sets of strings that have common structure/patterns, but can deviate from those patterns in ways that are difficult to anticipate with hard coded rules.
+
+For example, in most cases, US addresses start with street number. But there are exceptions: sometimes valid addresses deviate from this pattern (e.g. addresses starting with building name, PO box) and furthermore, addresses in real datasets often include typos & errors. Because there are infinitely many patterns and possible typos to account for, a probabilistic parser is well-suited to parse US addresses.
+
+A neat thing about a probabilistic approach (as opposed to a rule-based approach) is that the parser can continually learn from new training data, and continually improve its performance.
+
+Some other examples of domains where a probabilistic parser can be useful:
+- addresses in another country
+- product names/descriptions (e.g. parsing 'Twizzlers Twists, Strawberry, 16-Ounce Bags (Pack of 6)' into brand, item, flavor, weight, etc)
+- citations
 
 ## How to make a parser using parserator
 1. **Initialize a new parser**
