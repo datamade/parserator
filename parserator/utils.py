@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from __future__ import print_function
 from sklearn.metrics import f1_score
 from sklearn.base import BaseEstimator

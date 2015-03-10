@@ -1,6 +1,8 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from lxml import etree
 import os
-
 
 # appends a labeled list to an existing xml file
 # calls: appendListToXML, stripFormatting

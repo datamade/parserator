@@ -4,6 +4,9 @@
 def init_template():
 
     return """\
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import pycrfsuite
 import os
 import warnings

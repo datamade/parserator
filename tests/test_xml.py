@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from __future__ import print_function
 from parserator.data_prep_utils import sequence2XML
 from lxml import etree

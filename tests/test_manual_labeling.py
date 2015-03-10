@@ -1,7 +1,9 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from parserator.data_prep_utils import sequence2XML
 from lxml import etree
 import unittest
-
 
 class TestManualsequence2XML(unittest.TestCase) :
 
