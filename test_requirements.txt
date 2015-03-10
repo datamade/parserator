@@ -1,5 +1,0 @@
-nose
-caniusepython3
-coverage
-pylint
-tox
