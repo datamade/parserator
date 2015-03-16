@@ -12,7 +12,7 @@ Given a string, a parser will break it out into labeled components. The parser u
 ## parserator examples
 
 * [usaddress](https://github.com/datamade/usaddress) - Our first probabilistic parser and the basis for the parserator toolkit, it parses any address in the United States. [Read our blog post on how it works](http://datamade.us/blog/parsing-addresses-with-usaddress/).
-* [name-parser](https://github.com/datamade/name-parser) - Parser for romanized person names. 
+* [probablepeople](https://github.com/datamade/probablepeople) - Parser for romanized person names. 
 
 ## When is a probabalistic parser useful?
 A probabilistic parser is particularly useful for sets of strings that have common structure/patterns, but can deviate from those patterns in ways that are difficult to anticipate with hard coded rules.
@@ -54,7 +54,7 @@ Some other examples of domains where a probabilistic parser can be useful:
 3. **Define features relevant to your domain**
     * In \_\_init\_\_.py, features are defined in the tokens2features and tokenFeatures functions. Given an individual token, tokenFeatures should return features of that token - for example, a length feature and a word shape (casing) feature.
     * Given a sequence of tokens, tokens2features should return all features for the tokens in the sequence, including positional features - for example, the features of previous/next tokens, and features for tokens that start/end a string.
-    * For examples of features in other domains, see [features for names](https://github.com/datamade/name-parser/blob/master/name_parser/__init__.py#L80-L169) and [features for U.S. addresses](https://github.com/datamade/usaddress/blob/master/usaddress/__init__.py#L48-L112).
+    * For examples of features in other domains, see [features for names](https://github.com/datamade/probablepeople/blob/master/probablepeople/__init__.py#L80-L169) and [features for U.S. addresses](https://github.com/datamade/usaddress/blob/master/usaddress/__init__.py#L48-L112).
 4. **Prepare training data**
     * Parserator reads training data in the following XML form, where token text is wrapped in tags representing the correct label, and sequences of tokens are wrapped in a parent label (specified by PARENT\_LABEL in \_\_init\_\_.py):  
     ```
