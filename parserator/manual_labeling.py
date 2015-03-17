@@ -54,7 +54,7 @@ def consoleLabel(raw_strings, labels, module):
 
                 elif user_input =='n':
                     corrected_string = manualTagging(preds, 
-                                                labels)
+                                                valid_input_tags)
                     tagged_strings.add(tuple(corrected_string))
                     strings_left_to_tag.remove(raw_sequence)
 
@@ -77,8 +77,7 @@ def print_table(table):
                                 for i, x in enumerate(line)))
         
 
-def manualTagging(preds, labels):
-    label_options = dict((str(i), label) for i, label in enumerate(labels))
+def manualTagging(preds, valid_input_tags):
     tagged_sequence = []
     for token, predicted_tag in preds:
         while True:
@@ -87,14 +86,11 @@ def manualTagging(preds, labels):
             if user_choice == '' :
                 tag = predicted_tag
                 break
-            elif user_choice in label_options :
-                tag = label_options[user_choice]
+            elif user_choice in valid_input_tags :
+                tag = valid_input_tags[user_choice]
                 break
             elif user_choice in ('h' or 'help') :
-                print('These are the valid inputs:')
-                for item in sorted(list(label_options.items()), 
-                                   key=lambda x : int(x[0])) :
-                    print('%s : %s' % (item))
+                printHelp(valid_input_tags)
             else:
                 print("That is not a valid tag. Type 'help' to see the valid inputs")
 
@@ -131,7 +127,7 @@ def naiveConsoleLabel(raw_strings, labels, module):
                 user_input = sys.stdin.readline().strip()
 
                 if user_input =='t' or user_input == '':
-                    tagged_sequence = naiveManualTag(tokens, labels)
+                    tagged_sequence = naiveManualTag(tokens, valid_input_tags)
                     tagged_strings.add(tuple(tagged_sequence))
                     strings_left_to_tag.remove(raw_sequence)
                 elif user_input in ('h' or 'help') :
@@ -144,8 +140,7 @@ def naiveConsoleLabel(raw_strings, labels, module):
     print('Done! Yay!')
     return tagged_strings, strings_left_to_tag
 
-def naiveManualTag(raw_sequence, labels):
-    valid_input_tags = dict((str(i), label) for i, label in enumerate(labels))
+def naiveManualTag(raw_sequence, valid_input_tags):
     sequence_labels = []
     for token in raw_sequence:
         valid_tag = False
@@ -155,9 +150,7 @@ def naiveManualTag(raw_sequence, labels):
             if user_input_tag in valid_input_tags:
                 valid_tag = True
             elif user_input_tag in ('help' or 'h'):
-                print('These are the valid inputs:')
-                for i in range(len(labels)):
-                    print('%s : %s' %(i, valid_input_tags[str(i)]))
+                printHelp(valid_input_tags)
             elif user_input_tag == 'oops':
                 print('No worries! Let\'s start over in labeling %s' %raw_sequence)
                 sequence_labels_redo = naiveManualTag(raw_sequence, labels)
