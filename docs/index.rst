@@ -35,12 +35,14 @@ For example, in most cases, US addresses start with street number. But there are
 
 A neat thing about a probabilistic approach (as opposed to a rule-based approach) is that the parser can continually learn from new training data, and continually improve its performance.
 
-Some examples of existing parsers that use parserator:
+**Some examples of existing parsers that use parserator:**
 
 * `usaddress <https://github.com/datamade/usaddress>`_ - Our first probabilistic parser and the basis for the parserator toolkit, it parses any address in the United States. Read our `blog post <http://datamade.us/blog/parsing-addresses-with-usaddress/>`_ on how it works.
-* `name_parser <https://github.com/datamade/name-parser>`_ - A parser for romanized person names.
+* `probablepeople <https://github.com/datamade/probablepeople>`_ - A parser for romanized person names.
 
-Examples of other domains where a probabilistic parser can be useful:
+Try out these parsers on our `web interface <http://parserator.datamade.us>`_!
+
+**Examples of other domains where a probabilistic parser can be useful:**
 
 * addresses in another country
 * product names/descriptions (e.g. parsing 'Twizzlers Twists, Strawberry, 16-Ounce Bags (Pack of 6)' into brand, item, flavor, weight, etc)
@@ -87,7 +89,7 @@ How to make a parser using parserator
 3. **Define features relevant to your domain**
     * In ``__init__.py``, features are defined in the tokens2features and tokenFeatures functions. Given an individual token, tokenFeatures should return features of that token - for example, a length feature and a word shape (casing) feature.
     * Given a sequence of tokens, tokens2features should return all features for the tokens in the sequence, including positional features - for example, the features of previous/next tokens, and features for tokens that start/end a string.
-    * For examples of features in other domains, see `features for names <https://github.com/datamade/name-parser/blob/master/name_parser/__init__.py#L80-L169>`_ and `features for U.S. addresses <https://github.com/datamade/usaddress/blob/master/usaddress/__init__.py#L48-L112>`_.
+    * For examples of features in other domains, see `features for names <https://github.com/datamade/probablepeople/blob/master/probablepeople/__init__.py#L108-L177>`_ and `features for U.S. addresses <https://github.com/datamade/usaddress/blob/master/usaddress/__init__.py#L134-L180>`_.
 
 4. **Prepare training data**
     * Parserator reads training data in the following XML form, where token text is wrapped in tags representing the correct label, and sequences of tokens are wrapped in a parent label (specified by ``PARENT_LABEL`` in ``__init__.py``):  
@@ -123,6 +125,8 @@ Important links
 ===============
 
 * Documentation: http://parserator.rtfd.org/
+* Web interface for trying out parsers: http://parserator.datamade.us/
+* Blog post: http://datamade.us/blog/parse-name-or-parse-anything-really/
 * Repository: https://github.com/datamade/parserator
 * Issues: https://github.com/datamade/parserator/issues
 * Distribution: https://pypi.python.org/pypi/parserator
