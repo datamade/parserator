@@ -14,15 +14,14 @@ import re
 import csv
 from argparse import ArgumentParser
 import unidecode
+from collections import OrderedDict
 
 
 def consoleLabel(raw_strings, labels, module): 
     print('\nStart console labeling!\n')
-    print('These are the tags available for labeling:')
-    valid_input_tags = dict((str(i), label) for i, label in enumerate(labels))
-    for i in range(len(labels)):
-        print('%s : %s' %(i, valid_input_tags[str(i)]))
-    print('\n\n')
+    valid_input_tags = OrderedDict([(str(i), label) for i, label in enumerate(labels)])
+    printHelp(valid_input_tags)
+
     valid_responses = ['y', 'n', 's', 'f', '']
     finished = False
 
@@ -46,7 +45,7 @@ def consoleLabel(raw_strings, labels, module):
                 friendly_repr = [(token[0], token[1]) for token in preds]
                 print_table(friendly_repr)
 
-                sys.stderr.write('Is this correct? (y)es / (n)o / (s)kip / (f)inish tagging\n')
+                sys.stderr.write('Is this correct? (y)es / (n)o / (s)kip / (f)inish tagging / (h)elp\n')
                 user_input = sys.stdin.readline().strip()
 
                 if user_input =='y':
@@ -59,6 +58,8 @@ def consoleLabel(raw_strings, labels, module):
                     tagged_strings.add(tuple(corrected_string))
                     strings_left_to_tag.remove(raw_sequence)
 
+                elif user_input in ('h' or 'help') :
+                    printHelp(valid_input_tags)
 
                 elif user_input in ('' or 's') :
                     print('Skipped\n')
@@ -89,13 +90,13 @@ def manualTagging(preds, labels):
             elif user_choice in label_options :
                 tag = label_options[user_choice]
                 break
-            elif user_choice == '?' :
+            elif user_choice in ('h' or 'help') :
                 print('These are the valid inputs:')
                 for item in sorted(list(label_options.items()), 
                                    key=lambda x : int(x[0])) :
                     print('%s : %s' % (item))
             else:
-                print("That is not a valid tag. Type '?' to see the valid inputs")
+                print("That is not a valid tag. Type 'help' to see the valid inputs")
 
         tagged_sequence.append((token, tag))
     return tagged_sequence
@@ -104,11 +105,8 @@ def manualTagging(preds, labels):
 def naiveConsoleLabel(raw_strings, labels, module): 
 
     print('\nStart console labeling!\n')
-    print('These are the tags available for labeling:')
-    valid_input_tags = dict((str(i), label) for i, label in enumerate(labels))
-    for i in range(len(labels)):
-        print('%s : %s' %(i, valid_input_tags[str(i)]))
-    print('\n\n')
+    valid_input_tags = OrderedDict([(str(i), label) for i, label in enumerate(labels)])
+    printHelp(valid_input_tags)
 
     valid_responses = ['t', 's', 'f', '']
     finished = False
@@ -129,14 +127,15 @@ def naiveConsoleLabel(raw_strings, labels, module):
             user_input = None 
             while user_input not in valid_responses :
 
-                sys.stderr.write('(t)ag / (s)kip / (f)inish tagging\n')
+                sys.stderr.write('(t)ag / (s)kip / (f)inish tagging / (h)elp\n')
                 user_input = sys.stdin.readline().strip()
 
                 if user_input =='t' or user_input == '':
                     tagged_sequence = naiveManualTag(tokens, labels)
                     tagged_strings.add(tuple(tagged_sequence))
                     strings_left_to_tag.remove(raw_sequence)
-
+                elif user_input in ('h' or 'help') :
+                    printHelp(valid_input_tags)
                 elif user_input == 's':
                     print('Skipped\n')
                 elif user_input == 'f':
@@ -155,10 +154,14 @@ def naiveManualTag(raw_sequence, labels):
             user_input_tag = sys.stdin.readline().strip()
             if user_input_tag in valid_input_tags:
                 valid_tag = True
-            elif user_input_tag == 'help':
+            elif user_input_tag in ('help' or 'h'):
                 print('These are the valid inputs:')
                 for i in range(len(labels)):
                     print('%s : %s' %(i, valid_input_tags[str(i)]))
+            elif user_input_tag == 'oops':
+                print('No worries! Let\'s start over in labeling %s' %raw_sequence)
+                sequence_labels_redo = naiveManualTag(raw_sequence, labels)
+                return sequence_labels_redo
             else:
                 print("That is not a valid tag. Type 'help' to see the valid inputs")
             
@@ -166,6 +169,14 @@ def naiveManualTag(raw_sequence, labels):
         sequence_labels.append((token, token_label))
     return sequence_labels
 
+def printHelp(valid_input_tags):
+    print('*'*50)
+    print('These are the tags available for labeling:')
+    for valid_input in valid_input_tags:
+        print('%s : %s' %(valid_input, valid_input_tags[valid_input]))
+    print("\ntype 'help' at any time to see labels")
+    print("type 'oops' if you make a labeling error\n")
+    print('*'*50, '\n')
 
 def getArgumentParser():
     arg_parser = ArgumentParser(description="Label some strings")
