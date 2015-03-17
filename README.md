@@ -14,6 +14,8 @@ Given a string, a parser will break it out into labeled components. The parser u
 * [usaddress](https://github.com/datamade/usaddress) - Our first probabilistic parser and the basis for the parserator toolkit, it parses any address in the United States. [Read our blog post on how it works](http://datamade.us/blog/parsing-addresses-with-usaddress/).
 * [probablepeople](https://github.com/datamade/probablepeople) - Parser for romanized person names. 
 
+Try out these parsers on our [web interface](http://parserator.datamade.us/)!
+
 ## When is a probabalistic parser useful?
 A probabilistic parser is particularly useful for sets of strings that have common structure/patterns, but can deviate from those patterns in ways that are difficult to anticipate with hard coded rules.
 
@@ -80,10 +82,18 @@ Some other examples of domains where a probabilistic parser can be useful:
 6. **Repeat steps 3-5 as needed!**
 
 ## How to use your new parser
-Once you are able to create a model from training data, install your parser module. Then, you can use the ```parse``` and ```tag``` methods to process new strings. For example, to use the name_parser module:
+Once you are able to create a model from training data, install your parser module. Then, you can use the ```parse``` and ```tag``` methods to process new strings. For example, to use the probablepeople module:
 
 ```
->>> import name_parser  
->>> name_parser.parse('Mr George "Gob" Bluth II')  
+>>> import probablepeople  
+>>> probablepeople.parse('Mr George "Gob" Bluth II')  
 [('Mr', 'PrefixMarital'), ('George', 'GivenName'), ('"Gob"', 'Nickname'), ('Bluth', 'Surname'), ('II', 'SuffixGenerational')]
 ```
+
+## Important Links
+* Documentation: http://parserator.rtfd.org/
+* Web interface for trying out parsers: http://parserator.datamade.us/
+* Blog post: http://datamade.us/blog/parse-name-or-parse-anything-really/
+* Repository: https://github.com/datamade/parserator
+* Issues: https://github.com/datamade/parserator/issues
+* Distribution: https://pypi.python.org/pypi/parserator
