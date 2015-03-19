@@ -60,7 +60,7 @@ def readTrainingData( xml_infile_list, collection_tag ):
     for component_string in component_string_list:
         # convert string representation back to xml
         sequence_xml = etree.fromstring(component_string)
-        raw_text = etree.tostring(sequence_xml, method='text').decode('utf-8')
+        raw_text = etree.tostring(sequence_xml, method='text', encoding='utf-8')
         sequence_components = []
         for component in list(sequence_xml):
             sequence_components.append([component.text, component.tag])

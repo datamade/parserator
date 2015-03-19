@@ -7,11 +7,10 @@ reqs = [
     'future>=0.14.3',
     'lxml>=3.4.1',
     'python-crfsuite>=0.7',
-    'Unidecode>=0.4.17'
 ]
 
 setup(
-    version='0.3.4',
+    version='0.3.5',
     url='https://github.com/datamade/parserator',
     description='Create parsers',
     name='parserator',

@@ -13,7 +13,6 @@ from . import data_prep_utils
 import re
 import csv
 from argparse import ArgumentParser
-import unidecode
 from collections import OrderedDict
 
 
@@ -58,7 +57,7 @@ def consoleLabel(raw_strings, labels, module):
                     tagged_strings.add(tuple(corrected_string))
                     strings_left_to_tag.remove(raw_sequence)
 
-                elif user_input == 'h' or user_input == 'help' :
+                elif user_input in ('h', 'help', '?')  :
                     printHelp(valid_input_tags)
 
                 elif user_input in ('' or 's') :
@@ -73,8 +72,8 @@ def consoleLabel(raw_strings, labels, module):
 def print_table(table):
     col_width = [max(len(x) for x in col) for col in zip(*table)]
     for line in table:
-        print("| %s |" % " | ".join("{:{}}".format(x, col_width[i])
-                                for i, x in enumerate(line)))
+        print(u"| %s |" % " | ".join(u"{:{}}".format(x, col_width[i])
+                                     for i, x in enumerate(line)))
         
 
 def manualTagging(preds, valid_input_tags):
@@ -89,7 +88,7 @@ def manualTagging(preds, valid_input_tags):
             elif user_choice in valid_input_tags :
                 tag = valid_input_tags[user_choice]
                 break
-            elif user_choice == 'h' or user_choice == 'help' :
+            elif user_choice in ('h', 'help', '?') :
                 printHelp(valid_input_tags)
             elif user_choice == 'oops':
                 print('No worries! Let\'s start over in labeling this string')
@@ -134,7 +133,7 @@ def naiveConsoleLabel(raw_strings, labels, module):
                     tagged_sequence = naiveManualTag(tokens, valid_input_tags)
                     tagged_strings.add(tuple(tagged_sequence))
                     strings_left_to_tag.remove(raw_sequence)
-                elif user_input == 'h' or user_input == 'help' :
+                elif user_input in ('h', 'help', '?') :
                     printHelp(valid_input_tags)
                 elif user_input == 's':
                     print('Skipped\n')
@@ -153,7 +152,7 @@ def naiveManualTag(raw_sequence, valid_input_tags):
             user_input_tag = sys.stdin.readline().strip()
             if user_input_tag in valid_input_tags:
                 valid_tag = True
-            elif user_input_tag == 'help' or user_input_tag == 'h':
+            elif user_input_tag in ('h', 'help', '?') : 
                 printHelp(valid_input_tags)
             elif user_input_tag == 'oops':
                 print('No worries! Let\'s start over in labeling this string')
@@ -204,7 +203,7 @@ def label(module, infile, outfile):
     with open(infile, 'rU') as f :
         reader = csv.reader(f)
 
-        strings = set([unidecode.unidecode(row[0]) for row in reader])
+        strings = set([row[0].decode('utf-8') for row in reader])
 
     labels = module.LABELS
 
