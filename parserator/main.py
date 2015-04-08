@@ -25,7 +25,7 @@ def dispatch():
     sub_label.add_argument(dest='modulename', help='parser module name')
     sub_label.set_defaults(func=label)
 
-    sub_train.add_argument(dest='traindata', help='comma separated xml filepaths')
+    sub_train.add_argument(dest='traindata', help='comma separated xml filepaths, or "path/to/traindata/*.xml"')
     sub_train.add_argument(dest='modulename', help='parser module name')
     sub_train.set_defaults(func=train)
 
@@ -49,7 +49,18 @@ def label(args) :
 
 def train(args) :
     if args.traindata:
-        train_file_list = args.traindata.split(',')
+
+        if args.traindata.endswith('*.xml'):
+            train_data_dir = args.traindata[:-5]
+            if not train_data_dir:
+                train_data_dir = '.'
+            train_file_list = []
+            for filename in os.listdir(train_data_dir):
+                if filename.endswith('.xml'):
+                    train_file_list.append(args.traindata[:-5]+filename)
+        else:
+            train_file_list = args.traindata.split(',')
+
         module = __import__(args.modulename)
         
         training.train(module, train_file_list)
