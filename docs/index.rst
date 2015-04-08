@@ -113,7 +113,13 @@ How to make a parser using parserator
       
 5. **Train your parser**
     * To train your parser on your labeled training data, run ``parserator train [traindata] [modulename]``
-    * To train the parser on more than one training training data file, separate the filepaths with a comma (no space)
+    * The traindata argument can be the path to a single file, a list of filepaths separated by a comma (no space), or a glob pattern representing all xml files in a directory (quoted). Examples:
+        .. code-block:: bash
+
+            parserator train mytraindata/labeled.xml usaddress
+            parserator train file1.xml,file2.xml,file3.xml usaddress
+            parserator train "my/training/data/*.xml" usaddress
+
     * After training, your parser will have an updated model, in the form of a .crfsuite settings file (learned_settings.crfsuite by default)
     * If there was an existing .crfsuite settings file, it will be renamed with the model creation timestamp appended
     * Once the settings file exists, the parse and tag methods use it to label tokens in new strings
