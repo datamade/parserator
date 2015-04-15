@@ -74,4 +74,5 @@ def stripFormatting(collection) :
 def list2file(string_list, filepath):
     file = open( filepath, 'w' )
     for string in string_list:
-        file.write('"%s"\n' % string)
+        line = '"%s"\n' % string
+        file.write(line.encode('utf-8'))
