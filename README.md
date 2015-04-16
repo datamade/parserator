@@ -16,7 +16,7 @@ Given a string, a probabilistic parser will break it out into labeled components
 
 Try out these parsers on our [web interface](http://parserator.datamade.us/)!
 
-## When is a probabalistic parser useful?
+## When is a probabilistic parser useful?
 A probabilistic parser is particularly useful for sets of strings that may have common structure/patterns, but which deviate from those patterns in ways that are difficult to anticipate with hard-coded rules.
 
 For example, in most cases, <a href="http://en.wikipedia.org/wiki/Address_(geography)#United_States">addresses in the United States</a> start with a street number. But there are exceptions: sometimes valid U.S. addresses deviate from this pattern (e.g. addresses starting with a building name, or a [P.O. box](http://en.wikipedia.org/wiki/Post-office_box)) and furthermore, addresses in real datasets often include typos and other errors. Because there are infinitely many patterns and possible typos to account for, a probabilistic parser is well-suited to parse U.S. addresses.
@@ -24,7 +24,7 @@ For example, in most cases, <a href="http://en.wikipedia.org/wiki/Address_(geogr
 One neat thing about a probabilistic approach (as opposed to a rule-based approach) is that the parser can continually learn from new training data, and thus continually improve its performance.
 
 Some other examples of domains where a probabilistic parser can be useful:
-- addresses in other countries with unfamiliar standards
+- addresses in other countries with unfamiliar conventions
 - product names/descriptions (e.g. parsing phrases like "Twizzlers Twists, Strawberry, 16-Ounce Bags (Pack of 6)" into brand, item, flavor, weight, etc)
 - citations in academic writing
 
