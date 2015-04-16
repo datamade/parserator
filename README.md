@@ -7,7 +7,7 @@ A toolkit for making domain-specific probabilistic parsers
 Want a domain-specific parser that learns to parse strings probabilistically? Here's a tool that will help you make one! All you need is some training data to teach the parser about its domain.
 
 ## What a probabilistic parser does
-Given a string, a parser will break it out into labeled components. The parser uses [conditional random fields](http://en.wikipedia.org/wiki/Conditional_random_field) to label components based on (1) features of the component string and (2) the order of labels.
+Given a string, a probabilistic parser will break it out into labeled components. The parser uses [conditional random fields](http://en.wikipedia.org/wiki/Conditional_random_field) to label components based on (1) features of the component string and (2) the order of labels.
 
 ## parserator examples
 
@@ -17,19 +17,19 @@ Given a string, a parser will break it out into labeled components. The parser u
 Try out these parsers on our [web interface](http://parserator.datamade.us/)!
 
 ## When is a probabalistic parser useful?
-A probabilistic parser is particularly useful for sets of strings that have common structure/patterns, but can deviate from those patterns in ways that are difficult to anticipate with hard coded rules.
+A probabilistic parser is particularly useful for sets of strings that may have common structure/patterns, but which deviate from those patterns in ways that are difficult to anticipate with hard-coded rules.
 
-For example, in most cases, US addresses start with street number. But there are exceptions: sometimes valid addresses deviate from this pattern (e.g. addresses starting with building name, PO box) and furthermore, addresses in real datasets often include typos & errors. Because there are infinitely many patterns and possible typos to account for, a probabilistic parser is well-suited to parse US addresses.
+For example, in most cases, <a href="http://en.wikipedia.org/wiki/Address_(geography)#United_States">addresses in the United States</a> start with a street number. But there are exceptions: sometimes valid U.S. addresses deviate from this pattern (e.g. addresses starting with a building name, or a [P.O. box](http://en.wikipedia.org/wiki/Post-office_box)) and furthermore, addresses in real datasets often include typos and other errors. Because there are infinitely many patterns and possible typos to account for, a probabilistic parser is well-suited to parse U.S. addresses.
 
-A neat thing about a probabilistic approach (as opposed to a rule-based approach) is that the parser can continually learn from new training data, and continually improve its performance.
+One neat thing about a probabilistic approach (as opposed to a rule-based approach) is that the parser can continually learn from new training data, and thus continually improve its performance.
 
 Some other examples of domains where a probabilistic parser can be useful:
-- addresses in another country
-- product names/descriptions (e.g. parsing 'Twizzlers Twists, Strawberry, 16-Ounce Bags (Pack of 6)' into brand, item, flavor, weight, etc)
-- citations
+- addresses in other countries with unfamiliar standards
+- product names/descriptions (e.g. parsing phrases like "Twizzlers Twists, Strawberry, 16-Ounce Bags (Pack of 6)" into brand, item, flavor, weight, etc)
+- citations in academic writing
 
 ## How to make a parser - quick overview
-For more details on each step, see the [documentation](http://parserator.rtfd.org/)
+For more details on each step, see the [parserator documentation](http://parserator.rtfd.org/).
 
 1. **Initialize a new parser**
 
@@ -41,15 +41,15 @@ For more details on each step, see the [documentation](http://parserator.rtfd.or
 2. **Configure the parser to your domain**  
 
     * configure labels (i.e. the set of possible tags for the tokens)
-    * configure tokenizer (i.e. how a raw string will be split into a sequence of tokens to be tagged)
+    * configure the tokenizer (i.e. how a raw string will be split into a sequence of tokens to be tagged)
 
 3. **Define features relevant to your domain**
     * define token-level features (e.g. length, casing)
     * define sequence-level features (e.g. whether a token is the first token in the sequence)
 
 4. **Prepare training data**
-    * Parserator reads training data in XML format
-    * To create XML training data output from unlabeled strings in a csv, use parserator's command line interface to manually label tokens. To start labeling, run ```parserator label [infile] [outfile] [modulename]```
+    * Parserator reads training data in [XML format](http://en.wikipedia.org/wiki/XML)
+    * To create XML training data output from unlabeled strings in a [csv file](http://en.wikipedia.org/wiki/Comma-separated_values), use parserator's command line interface to manually label tokens. To start labeling, run ```parserator label [infile] [outfile] [modulename]```
     * For example, ```parserator label unlabeled/rawstrings.csv labeled_xml/labeled.xml usaddress```
       
 5. **Train your parser**
