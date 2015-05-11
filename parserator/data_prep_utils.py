@@ -3,6 +3,7 @@
 
 from lxml import etree
 import os
+import re
 
 # appends a labeled list to an existing xml file
 # calls: appendListToXML, stripFormatting
@@ -74,5 +75,5 @@ def stripFormatting(collection) :
 def list2file(string_list, filepath):
     file = open( filepath, 'w' )
     for string in string_list:
-        line = '"%s"\n' % string
+        line = '"%s"\n' % re.sub('"','""', string)
         file.write(line.encode('utf-8'))
