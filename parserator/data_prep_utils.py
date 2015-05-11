@@ -3,7 +3,7 @@
 
 from lxml import etree
 import os
-import re
+import csv
 
 # appends a labeled list to an existing xml file
 # calls: appendListToXML, stripFormatting
@@ -73,7 +73,7 @@ def stripFormatting(collection) :
 
 # writes a list of strings to a file
 def list2file(string_list, filepath):
-    file = open( filepath, 'w' )
-    for string in string_list:
-        line = '"%s"\n' % re.sub('"','""', string)
-        file.write(line.encode('utf-8'))
+    with open(filepath, 'wb') as csvfile:
+        writer = csv.writer(csvfile, doublequote=True, quoting=csv.QUOTE_MINIMAL)
+        for string in string_list:
+            writer.writerow([string.encode('utf-8')])
