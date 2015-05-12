@@ -9,6 +9,7 @@ def init_template():
 
 import pycrfsuite
 import os
+import re
 import warnings
 from collections import OrderedDict
 
@@ -71,6 +72,12 @@ def tag(raw_string) :
 def tokenize(raw_string):
     # this determines how any given string is split into its tokens
     # handle any punctuation you want to split on, as well as any punctuation to capture
+
+    if isinstance(raw_string, bytes):
+        try:
+            raw_string = str(raw_string, encoding='utf-8')
+        except:
+            raw_string = str(raw_string)
     
     re_tokens = # re.compile( [REGEX HERE], re.VERBOSE | re.UNICODE)
     tokens = re_tokens.findall(raw_string)
