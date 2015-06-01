@@ -41,7 +41,7 @@ def consoleLabel(raw_strings, labels, module):
             user_input = None 
             while user_input not in valid_responses :
 
-                friendly_repr = [(token[0], token[1]) for token in preds]
+                friendly_repr = [(token[0].strip(), token[1]) for token in preds]
                 print_table(friendly_repr)
 
                 sys.stderr.write('Is this correct? (y)es / (n)o / (s)kip / (f)inish tagging / (h)elp\n')
