@@ -36,7 +36,7 @@ def consoleLabel(raw_strings, labels, module):
             print('-'*50)
             print('STRING: %s' %raw_sequence)
             
-            preds = module.parse(raw_sequence)
+            preds = list(module.parse(raw_sequence))
 
             user_input = None 
             while user_input not in valid_responses :
