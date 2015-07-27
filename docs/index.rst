@@ -63,8 +63,9 @@ How to make a parser using parserator
     .. code-block:: bash
 
         parserator init [YOUR PARSER NAME]
+        python setup.py develop
 
-    This will initialize a new parser in your current directory. For example, running ``parserator init foo`` will generate the following directories and files:
+    The ``init`` command will initialize a new parser in your current directory. For example, running ``parserator init foo`` will generate the following directories and files:
 
     ::
 
