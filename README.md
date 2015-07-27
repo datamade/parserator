@@ -32,11 +32,12 @@ Some other examples of domains where a probabilistic parser can be useful:
 For more details on each step, see the [parserator documentation](http://parserator.rtfd.org/).
 
 1. **Initialize a new parser**
-
+    
     ```
-    pip install parserator  
+    pip install parserator
     parserator init [YOUR PARSER NAME]  
-    ```  
+    python setup.py develop
+    ```
 
 2. **Configure the parser to your domain**  
 
