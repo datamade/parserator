@@ -1,8 +1,8 @@
 parserator
 ==========
+A toolkit for making domain-specific probabilistic parsers
 
 [![Join the chat at https://gitter.im/datamade/parserator](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/datamade/parserator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-A toolkit for making domain-specific probabilistic parsers
 
 [![Build Status](https://travis-ci.org/datamade/parserator.svg?branch=master)](https://travis-ci.org/datamade/parserator)
 
