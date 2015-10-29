@@ -63,7 +63,9 @@ For more details on each step, see the [parserator documentation](http://parsera
 6. **Repeat steps 3-5 as needed!**
 
 ## How to use your new parser
-Once you are able to create a model from training data, install your parser module. Then, you can use the ```parse``` and ```tag``` methods to process new strings. For example, to use the probablepeople module:
+Once you are able to create a model from training data, install your custom parser by running `python setup.py develop`.
+
+Then, in a python shell, you can import your parser and use the ```parse``` and ```tag``` methods to process new strings. For example, to use the probablepeople module:
 
 ```
 >>> import probablepeople  
