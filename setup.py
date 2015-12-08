@@ -10,7 +10,7 @@ reqs = [
 ]
 
 setup(
-    version='0.4.0',
+    version='0.4.1',
     url='https://github.com/datamade/parserator',
     description='Create parsers',
     name='parserator',

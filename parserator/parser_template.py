@@ -48,7 +48,7 @@ def parse(raw_string):
     features = tokens2features(tokens)
 
     tags = TAGGER.tag(features)
-    return zip(tokens, tags)
+    return list(zip(tokens, tags))
 
 def tag(raw_string) :
     tagged = OrderedDict()
