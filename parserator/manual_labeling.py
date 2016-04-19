@@ -14,7 +14,12 @@ import re
 import csv
 from argparse import ArgumentParser
 from collections import OrderedDict
+import io
 
+if sys.version < '3' :
+    from backports import csv
+else :
+    import csv
 
 def consoleLabel(raw_strings, labels, module): 
     print('\nStart console labeling!\n')
@@ -188,22 +193,18 @@ def getArgumentParser():
 
 def label(module, infile, outfile):
 
-    file_slug = re.sub('(.*/)|(.csv)|(unlabeled_)', '', infile)
-    unlabeled_dir = re.sub('[^/]+$', '', infile)
-
     # Check to make sure we can write to outfile
     if os.path.isfile(outfile):
-        with open(outfile, 'r+' ) as f:
+        with io.open(outfile) as f:
             try :
                 tree = etree.parse(f)
             except :
                 raise ValueError("%s does not seem to be a valid xml file"
                                  % outfile)
 
-    with open(infile, 'rU') as f :
+    with io.open(infile) as f :
         reader = csv.reader(f)
-
-        strings = set([row[0].decode('utf-8') for row in reader])
+        strings = set(row[0] for row in reader)
 
     labels = module.LABELS
 
@@ -213,5 +214,11 @@ def label(module, infile, outfile):
         labeled_list, raw_strings_left = naiveConsoleLabel(strings, labels, module)
 
     data_prep_utils.appendListToXMLfile(labeled_list, module, outfile)
-    data_prep_utils.list2file(raw_strings_left, unlabeled_dir+'unlabeled_'+file_slug+'.csv')
+
+    file_slug = os.path.basename(infile)
+    if not file_slug.startswith('unlabeled_'):
+        file_slug = 'unlabeled_' + file_slug
+    remainder_file = os.path.dirname(infile) + file_slug
+
+    data_prep_utils.list2file(raw_strings_left, remainder_file)
 

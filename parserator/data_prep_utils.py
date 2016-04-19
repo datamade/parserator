@@ -1,9 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from lxml import etree
 import os
-import csv
+import io
+import sys
+
+from lxml import etree
+
+if sys.version < '3' :
+    from backports import csv
+else :
+    import csv
+
 
 # appends a labeled list to an existing xml file
 # calls: appendListToXML, stripFormatting
@@ -14,7 +22,7 @@ def appendListToXMLfile(labeled_list, module, filepath):
     #                                   ...           ]
 
     if os.path.isfile(filepath):
-        with open( filepath, 'r+' ) as f:
+        with io.open(filepath) as f:
             tree = etree.parse(filepath)
             collection_XML = tree.getroot()
             collection_XML = stripFormatting(collection_XML)
@@ -26,8 +34,8 @@ def appendListToXMLfile(labeled_list, module, filepath):
     parent_tag = module.PARENT_LABEL
     collection_XML = appendListToXML(labeled_list, collection_XML, parent_tag)
 
-    with open(filepath, 'w') as f :
-        f.write(etree.tostring(collection_XML, pretty_print = True)) 
+    with io.open(filepath, 'w') as f :
+        f.write(etree.tostring(collection_XML, pretty_print = True).decode('utf-8')) 
 
 
 # given a list of labeled sequences to an xml list, 
@@ -73,7 +81,7 @@ def stripFormatting(collection) :
 
 # writes a list of strings to a file
 def list2file(string_list, filepath):
-    with open(filepath, 'wb') as csvfile:
+    with io.open(filepath, 'w') as csvfile:
         writer = csv.writer(csvfile, doublequote=True, quoting=csv.QUOTE_MINIMAL)
         for string in string_list:
-            writer.writerow([string.encode('utf-8')])
+            writer.writerow([string])

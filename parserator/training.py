@@ -14,7 +14,7 @@ import re
 import time
 
 
-def trainModel(training_data, module,
+def trainModel(training_data, module, model_path,
                params_to_set={'c1':0.1, 'c2':0.01, 'feature.minfreq':0}):
 
     X = []
@@ -30,7 +30,7 @@ def trainModel(training_data, module,
     for xseq, yseq in zip(X, Y):
         trainer.append(xseq, yseq)
 
-    trainer.train(module.__name__+'/'+module.MODEL_FILE)
+    trainer.train(model_path)
 
 
 # given a list of xml training filepaths & a parser module,
@@ -78,17 +78,21 @@ def renameModelFile(old_model):
         os.rename(old_model, renamed)
 
 
-def train(module, train_file_list) :
+def train(module, train_file_list, model_file) :
 
     training_data = list(readTrainingData(train_file_list, module.GROUP_LABEL))
     if not training_data:
         print('ERROR: No training data found. Perhaps double check your training data filepaths?')
         return
 
-    model_path = module.__name__+'/'+module.MODEL_FILE
+    if model_file is None:
+        model_path = module.__name__+'/'+module.MODEL_FILE
+    else:
+        model_path = model_file
     renameModelFile(model_path)
 
     print('\ntraining model on {num} training examples from {file_list}'.format(num=len(training_data), file_list=train_file_list))
-    trainModel(training_data, module)
+
+    trainModel(training_data, module, model_file)
 
     print('\ndone training! model file created: {path}'.format(path=model_path))

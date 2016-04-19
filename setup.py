@@ -9,6 +9,10 @@ reqs = [
     'python-crfsuite>=0.7',
 ]
 
+if sys.version < '3':
+    reqs += ['backports.csv']
+
+
 setup(
     version='0.4.1',
     url='https://github.com/datamade/parserator',
