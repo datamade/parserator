@@ -9,20 +9,20 @@ class TestManualsequence2XML(unittest.TestCase) :
 
     def test_single_component(self) :
 
-        test_input = [ ('bob', 'foo') ]
-        expected_xml = '<TokenSequence><foo>bob</foo></TokenSequence>'
-        assert etree.tostring( sequence2XML(test_input, 'TokenSequence') ) == expected_xml
+        test_input = [('bob', 'foo')]
+        expected_xml = b'<TokenSequence><foo>bob</foo></TokenSequence>'
+        assert etree.tostring(sequence2XML(test_input, 'TokenSequence')) == expected_xml
 
     def test_two_components(self) :
 
-        test_input = [ ('bob', 'foo'), ('b', 'bar') ]
-        expected_xml = '<TokenSequence><foo>bob</foo> <bar>b</bar></TokenSequence>'
+        test_input = [('bob', 'foo'), ('b', 'bar')]
+        expected_xml = b'<TokenSequence><foo>bob</foo> <bar>b</bar></TokenSequence>'
         assert etree.tostring( sequence2XML(test_input, 'TokenSequence') ) == expected_xml
 
     def test_multiple_components(self) :
 
-        test_input = [ ('bob', 'foo'), ('b', 'bar'), ('sr', 'foobar') ]
-        expected_xml = '<TokenSequence><foo>bob</foo> <bar>b</bar> <foobar>sr</foobar></TokenSequence>'
+        test_input = [('bob', 'foo'), ('b', 'bar'), ('sr', 'foobar')]
+        expected_xml = b'<TokenSequence><foo>bob</foo> <bar>b</bar> <foobar>sr</foobar></TokenSequence>'
 
         assert etree.tostring( sequence2XML(test_input, 'TokenSequence') ) == expected_xml
 

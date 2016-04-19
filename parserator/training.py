@@ -50,7 +50,7 @@ def readTrainingData( xml_infile_list, collection_tag ):
                 file_xml = data_prep_utils.stripFormatting(file_xml)
                 for component_etree in file_xml:
                     # etree components to string representations
-                    component_string_list.append(etree.tostring(component_etree).decode('utf-8'))
+                    component_string_list.append(etree.tostring(component_etree, method='text', encoding='utf-8'))
         else:
             print('WARNING: %s does not exist' % xml_infile)
     # get rid of duplicates in string representations

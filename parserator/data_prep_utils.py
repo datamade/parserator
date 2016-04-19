@@ -35,7 +35,7 @@ def appendListToXMLfile(labeled_list, module, filepath):
     collection_XML = appendListToXML(labeled_list, collection_XML, parent_tag)
 
     with io.open(filepath, 'w') as f :
-        f.write(etree.tostring(collection_XML, pretty_print = True).decode('utf-8')) 
+        f.write(etree.tostring(collection_XML, pretty_print = True, encoding='utf-8')
 
 
 # given a list of labeled sequences to an xml list, 
