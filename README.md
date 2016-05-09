@@ -76,7 +76,7 @@ Then, in a python shell, you can import your parser and use the ```parse``` and 
 ## Important Links
 * Documentation: http://parserator.rtfd.org/
 * Web interface for trying out parsers: http://parserator.datamade.us/
-* Blog post: http://datamade.us/blog/parse-name-or-parse-anything-really/
+* Blog post: http://datamade.us/blog/parse-name-or-parse-anything-really
 * Repository: https://github.com/datamade/parserator
 * Issues: https://github.com/datamade/parserator/issues
 * Distribution: https://pypi.python.org/pypi/parserator
