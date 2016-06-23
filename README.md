@@ -13,7 +13,7 @@ Given a string, a probabilistic parser will break it out into labeled components
 
 ## parserator examples
 
-* [usaddress](https://github.com/datamade/usaddress) - Our first probabilistic parser and the basis for the parserator toolkit, it parses any address in the United States. [Read our blog post on how it works](http://datamade.us/blog/parsing-addresses-with-usaddress/).
+* [usaddress](https://github.com/datamade/usaddress) - Our first probabilistic parser and the basis for the parserator toolkit, it parses any address in the United States. [Read our blog post on how it works](http://datamade.us/blog/parsing-addresses-with-usaddress).
 * [probablepeople](https://github.com/datamade/probablepeople) - Parser for romanized person names. 
 
 Try out these parsers on our [web interface](http://parserator.datamade.us/)!
