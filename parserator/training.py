@@ -87,6 +87,13 @@ def train(module, train_file_list, model_file) :
 
     if model_file is None:
         model_path = module.__name__+'/'+module.MODEL_FILE
+        if hasattr(module, 'MODEL_FILES'):
+            print("\nNOTE: this parser allows for multiple model files")
+            print("You can specify a model with the --modelfile argument")
+            print("Models available:")
+            for m in module.MODEL_FILES:
+                print("  - %s" % m)
+            print("Since no model was specified, we will train the default model")
     else:
         model_path = model_file
     renameModelFile(model_path)
