@@ -93,6 +93,6 @@ def train(module, train_file_list, model_file) :
 
     print('\ntraining model on {num} training examples from {file_list}'.format(num=len(training_data), file_list=train_file_list))
 
-    trainModel(training_data, module, model_file)
+    trainModel(training_data, module, model_path)
 
     print('\ndone training! model file created: {path}'.format(path=model_path))
