@@ -95,7 +95,10 @@ def train(module, train_file_list, model_file) :
                 print("  - %s" % m)
             print("Since no model was specified, we will train the default model")
     else:
-        model_path = model_file
+        if hasattr(module, 'MODEL_FILES'):
+            model_path = module.__name__+'/'+module.MODEL_FILES[model_file]
+        else: # should this even be a fallback
+            model_path = module.__name__+'/'+model_file
     renameModelFile(model_path)
 
     print('\ntraining model on {num} training examples from {file_list}'.format(num=len(training_data), file_list=train_file_list))
