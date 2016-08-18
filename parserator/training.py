@@ -96,7 +96,14 @@ def train(module, train_file_list, model_file) :
             print("Since no model was specified, we will train the default model")
     else:
         if hasattr(module, 'MODEL_FILES'):
-            model_path = module.__name__+'/'+module.MODEL_FILES[model_file]
+            try:
+                model_path = module.__name__+'/'+module.MODEL_FILES[model_file]
+            except KeyError:
+                print("\nERROR: Invalid --modelfile argument")
+                print("Models available:")
+                for m in module.MODEL_FILES:
+                    print("  - %s" % m)
+                return
         else: # should this even be a fallback
             model_path = module.__name__+'/'+model_file
     renameModelFile(model_path)
