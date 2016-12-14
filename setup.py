@@ -7,7 +7,7 @@ except ImportError :
 
 reqs = [
     'future>=0.14.3',
-    'lxml>=3.4.1',
+    'lxml==3.6.0',
     'python-crfsuite>=0.7',
 ]
 
