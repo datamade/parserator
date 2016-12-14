@@ -49,7 +49,7 @@ def dispatch():
                           help='module name for a new parser')
     sub_init.set_defaults(func=init)
 
-    if(len(sys.argv[1:]) == 0:
+    if len(sys.argv[1:]) == 0:
         parser.print_help()
         parser.exit()
 
