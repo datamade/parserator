@@ -43,4 +43,4 @@ after_success:
   upload; fi
 env:
   global:
-  - secure: BltVbgXfZWBFpZId6l33MfMY+O9k6O75bJsyEqz+8OQ8Y7wF2NH85er+8z/gClPjbbE1UDBh+1m4ifUM+QEp6YvgLaciT2bd7x+4Z/Ur5s3IXb1dJML1W/IdBUiN8VMeDSBzHk/LxOCDnPvEPG4wRYxEK0Be+1d70An0r43MriM=
+  - secure: ihuVvRbZ6SZuF1EJhz7qjS27HG/HJlviy6A3sb8mXfZSZPTh2aSJRsPFDl40/q9XOSYK5kQGNYC6cY6XKA48oFjjy47al3C5NA8yKzaqKDd6nSvZ04khpaLVtcLtX1zLRRenhR+8m8wOAudmz4BaeKOk1nCzOpTaPLnG3RYC0UM=

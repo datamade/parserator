@@ -125,5 +125,3 @@ def init(args) :
         with open(token_test_path, 'w') as f:
             f.write(parser_template.test_tokenize_template(name))
         print('* %s' %token_test_path, sys.stderr)
-
-
