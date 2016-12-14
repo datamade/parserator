@@ -23,7 +23,7 @@ build: false
 test_script:
   # Nosetests take care of unit tests
   # Behave runs the example scripts and tries to verify if it produces the right output
-  - nosetests --with-coverage --cover-package=usaddress
+  - nosetests --with-coverage --cover-package=parserator
 
 on_success:
   # Could run coveralls here but will leave that to travis tests
