@@ -2,8 +2,6 @@ parserator
 ==========
 A toolkit for making domain-specific probabilistic parsers
 
-[![Join the chat at https://gitter.im/datamade/parserator](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/datamade/parserator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [![Build Status](https://travis-ci.org/datamade/parserator.svg?branch=master)](https://travis-ci.org/datamade/parserator)
 
 Do you have domain-specific text data that would be much more useful if you could derive structure from the strings? This toolkit will help you create a custom NLP model that 'learns' from patterns in real data, and then uses that knowledge to process new strings automatically. All you need is some training data to teach your parser about its domain.
