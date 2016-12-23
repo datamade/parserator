@@ -91,7 +91,7 @@ If something is not behaving intuitively, it is a bug, and should be reported.
 Report it here: https://github.com/datamade/my-reps/issues
 
 ## Patches and Pull Requests
-We welcome your ideas! You can make suggestions in the form of [github issues](https://github.com/datamade/django-councilmatic/issues) (bug reports, feature requests, general questions), or you can submit a code contribution via a pull request.
+We welcome your ideas! You can make suggestions in the form of [github issues](https://github.com/datamade/parserator/issues) (bug reports, feature requests, general questions), or you can submit a code contribution via a pull request.
 
 How to contribute code:
 
@@ -101,4 +101,4 @@ How to contribute code:
 
 ## Copyright and Attribution
 
-Copyright (c) 2016 DataMade. Released under the [MIT License](https://github.com/datamade/dedupe-examples/blob/master/LICENSE.md).
+Copyright (c) 2016 DataMade. Released under the [MIT License](https://github.com/datamade/parserator/blob/master/LICENSE).
