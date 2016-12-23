@@ -88,7 +88,7 @@ Then, in a python shell, you can import your parser and use the ```parse``` and 
 ## Errors and Bugs
 
 If something is not behaving intuitively, it is a bug, and should be reported.
-Report it here: https://github.com/datamade/my-reps/issues
+Report it [here](https://github.com/datamade/parserator/issues).
 
 ## Patches and Pull Requests
 We welcome your ideas! You can make suggestions in the form of [github issues](https://github.com/datamade/parserator/issues) (bug reports, feature requests, general questions), or you can submit a code contribution via a pull request.
