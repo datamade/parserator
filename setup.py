@@ -7,7 +7,7 @@ except ImportError :
 
 reqs = [
     'future>=0.14.3',
-    'lxml==3.6.0',
+    'lxml>=3.7.3',
     'python-crfsuite>=0.7',
 ]
 
@@ -16,7 +16,7 @@ if sys.version < '3':
 
 
 setup(
-    version='0.6.4',
+    version='0.6.5',
     url='https://github.com/datamade/parserator',
     description='Create parsers',
     name='parserator',
