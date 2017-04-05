@@ -17,9 +17,9 @@ from collections import OrderedDict
 #  _____________________
 # |1. CONFIGURE LABELS! |
 # |_____________________| 
-#     (\__/) || 
-#     (•ㅅ•) || 
-#     / 　 づ
+#
+#
+#
 LABELS = [] # The labels should be a list of strings
 
 #***************** OPTIONAL CONFIG ***************************************************
