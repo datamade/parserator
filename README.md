@@ -50,7 +50,7 @@ For more details on each step, see the [parserator documentation](http://parsera
 
 4. **Prepare training data**
     * Parserator reads training data in [XML format](http://en.wikipedia.org/wiki/XML)
-    * To create XML training data output from unlabeled strings in a [CSV file](http://en.wikipedia.org/wiki/Comma-separated_values), use parserator's command line interface to manually label tokens. To start labeling, run ```parserator label [infile] [outfile] [modulename]```
+    * To create XML training data output from unlabeled strings in a [CSV file](http://en.wikipedia.org/wiki/Comma-separated_values), use parserator's command line interface to manually label tokens. It uses values in first column, and it ignores other columns. To start labeling, run ```parserator label [infile] [outfile] [modulename]```
     * For example, ```parserator label unlabeled/rawstrings.csv labeled_xml/labeled.xml usaddress```
 
 5. **Train your parser**
