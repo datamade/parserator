@@ -37,7 +37,7 @@ A neat thing about a probabilistic approach (as opposed to a rule-based approach
 
 **Some examples of existing parsers that use parserator:**
 
-* `usaddress <https://github.com/datamade/usaddress>`_ - Our first probabilistic parser and the basis for the parserator toolkit, it parses any address in the United States. Read our `blog post <http://datamade.us/blog/parsing-addresses-with-usaddress/>`_ on how it works.
+* `usaddress <https://github.com/datamade/usaddress>`_ - Our first probabilistic parser and the basis for the parserator toolkit, it parses any address in the United States. Read our `blog post <http://datamade.us/blog/parsing-addresses-with-usaddress>`_ on how it works.
 * `probablepeople <https://github.com/datamade/probablepeople>`_ - A parser for romanized person names.
 
 Try out these parsers on our `web interface <http://parserator.datamade.us>`_!
