@@ -1,3 +1,2 @@
-nose
-coverage
-
+pytest
+pytest-coverage

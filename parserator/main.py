@@ -4,42 +4,53 @@
 from __future__ import print_function
 from __future__ import absolute_import
 
-from argparse import ArgumentParser, ArgumentTypeError
+from builtins import open
+
+import argparse
 import os
 import shutil
 import fileinput
 import sys
 import glob
+import textwrap
+
+from lxml import etree
 
 from . import manual_labeling
 from . import training
 from . import parser_template
+from . import data_prep_utils
 
 def dispatch():
 
-    parser = ArgumentParser(description="")
+    parser = argparse.ArgumentParser(description="")
     parser_subparsers = parser.add_subparsers()
 
     # Arguments for label command
     sub_label = parser_subparsers.add_parser('label')
     sub_label.add_argument(dest='infile',
-                           help='input csv filepath for the label task')
+                           help='input csv filepath for the label task',
+                           type=file_type)
     sub_label.add_argument(dest='outfile',
-                           help='output xml filepath for the label task')
-    sub_label.add_argument(dest='modulename',
-                           help='parser module name')
+                           help='output xml filepath for the label task',
+                           action=XML)
+    sub_label.add_argument(dest='module',
+                           help='parser module name',
+                           type=python_module)
     sub_label.set_defaults(func=label)
 
     # Arguments for train command
     sub_train = parser_subparsers.add_parser('train')
     sub_train.add_argument(dest='traindata',
                            help='comma separated xml filepaths, or "path/to/traindata/*.xml"',
-                           type=training_files)
-    sub_train.add_argument(dest='modulename',
-                           help='parser module name')
+                           type=training_data)
+    sub_train.add_argument(dest='module',
+                           help='parser module name',
+                           type=python_module)
     sub_train.add_argument('--modelfile',
-                           dest='modelfile',
+                           dest='model_path',
                            help='location of model file',
+                           action=ModelFile,
                            required=False)
     sub_train.set_defaults(func=train)
 
@@ -57,32 +68,29 @@ def dispatch():
 
     args.func(args)
 
-def training_files(arg):
-    if ',' in arg:
-        train_file_list = arg.split(',')
-    else:
-        train_file_list = glob.glob(arg)
-
-    train_file_list = [f for f in train_file_list
-                       if f.lower().endswith('.xml')]
-
-    if not train_file_list:
-        raise ArgumentTypeError('Please specify one or more xml training files (comma separated) [--trainfile FILE]')
-
-    return train_file_list
 
     
 def label(args) :
-    module = __import__(args.modulename)
-    infile_path = args.infile
-    outfile_path = args.outfile
-    manual_labeling.label(module, infile_path, outfile_path)
+    manual_labeling.label(args.module, args.infile, args.outfile, args.xml)
 
 def train(args) :
-    train_file_list = args.traindata
-    module = __import__(args.modulename)
-    modelfile = args.modelfile
-    training.train(module, train_file_list, modelfile)
+    training_data = args.traindata
+    module = args.module
+    model_path = args.model_path
+
+    if model_path is None:
+        model_path = module.__name__ + '/' +module.MODEL_FILE
+        if hasattr(module, 'MODEL_FILES'):
+            msg = """
+                  NOTE: this parser allows for multiple model files
+                  You can specify a model with the --modelfile argument
+                  Models available:"""
+            print(textwrap.dedent(msg))
+            for m in module.MODEL_FILES:
+                print("  - %s" % m)
+            print("Since no model was specified, we will train the default model")
+
+    training.train(module, training_data, model_path)
 
 
 def init(args) :
@@ -125,3 +133,87 @@ def init(args) :
         with open(token_test_path, 'w') as f:
             f.write(parser_template.test_tokenize_template(name))
         print('* %s' %token_test_path, sys.stderr)
+
+class XML(argparse.Action):
+    def __call__(self, parser, namespace, string, option_string):
+        try:
+            with open(string, 'r') as f:
+                tree = etree.parse(f)
+                xml = tree.getroot()
+        except (OSError, IOError):
+            xml = None
+        except etree.XMLSyntaxError as e:
+            if 'Document is empty' not in str(e):
+                raise argparse.ArgumentError(self,
+                                             "%s does not seem to be a valid xml file"
+                                             % string)
+            xml = None
+
+        setattr(namespace, self.dest, string)
+        setattr(namespace, 'xml', xml)
+
+def file_type(arg):
+    try:
+        f = open(arg, 'r')
+    except OSError as e:
+        message = _("can't open '%s': %s")
+        raise ArgumentTypeError(message % (arg, e))
+
+    return f
+
+def training_data(arg):
+    all_files = []
+    for path in arg.split(','):
+        all_files.extend(glob.glob(path))
+
+    xml_files = [f for f in all_files
+                 if (f.lower().endswith('.xml')
+                     and os.path.isfile(f))]
+
+    if not xml_files:
+        raise argparse.ArgumentTypeError('Please specify one or more xml training files (comma separated) [--trainfile FILE]')
+
+    training_data = set()
+    for xml_file in xml_files:
+        with open(xml_file, 'r') as f:
+            try:
+                tree = etree.parse(f)
+            except etree.XMLSyntaxError:
+                raise argparse.ArgumentTypeError('%s is not a valid xml file' % (f.name,))
+
+            file_xml = tree.getroot()
+            training_data.update(list(data_prep_utils.TrainingData(file_xml)))
+
+    if not training_data:
+        raise argparse.ArgumentTypeError("No training data found. Perhaps double check "
+                                         "your training data filepaths?")
+
+    msg = """
+          training model on {num} training examples from {file_list} file(s)"""
+
+    print(textwrap.dedent(msg.format(num=len(training_data),
+                                     file_list=xml_files)))
+
+    return training_data
+
+class ModelFile(argparse.Action):
+    def __call__(self, parser, namespace, model_file, option_string):
+        module = namespace.module
+
+        if hasattr(module, 'MODEL_FILES'):
+            try:
+                model_path = module.__name__ + '/'  +module.MODEL_FILES[model_file]
+            except KeyError:
+                msg = """
+                      Invalid --modelfile argument
+                      Models available: %s"""
+                raise argparse.ArgumentTypeError(text.dedent(msg) % module.MODEL_FILES)
+        else:
+            raise argparse.ArgumentError(self, 'This parser does not allow for multiple models')
+
+        setattr(namespace, self.dest, model_path)
+
+def python_module(arg):
+    module = __import__(arg)
+    return module
+

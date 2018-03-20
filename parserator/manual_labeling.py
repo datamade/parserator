@@ -179,32 +179,12 @@ def printHelp(valid_input_tags):
     print("type 'oops' if you make a labeling error\n")
     print('*'*50, '\n')
 
-def getArgumentParser():
-    arg_parser = ArgumentParser(description="Label some strings")
-    arg_parser.add_argument(dest="infile", 
-                            help="input csv", metavar="FILE")
-    arg_parser.add_argument(dest="outfile", 
-                            help="output csv", metavar="FILE")
-    arg_parser.add_argument("-n",
-                            help="-n for naive labeling (if there isn't an existing .crfsuite settings file)", action="store_true")
-    return arg_parser
+def label(module, infile, outfile, xml):
 
+    training_data = data_prep_utils.TrainingData(xml, module)
 
-
-def label(module, infile, outfile):
-
-    # Check to make sure we can write to outfile
-    if os.path.isfile(outfile):
-        with io.open(outfile) as f:
-            try :
-                tree = etree.parse(f)
-            except :
-                raise ValueError("%s does not seem to be a valid xml file"
-                                 % outfile)
-
-    with io.open(infile) as f :
-        reader = csv.reader(f)
-        strings = set(row[0] for row in reader)
+    reader = csv.reader(infile)
+    strings = set(row[0] for row in reader)
 
     labels = module.LABELS
 
@@ -213,12 +193,15 @@ def label(module, infile, outfile):
     else:
         labeled_list, raw_strings_left = naiveConsoleLabel(strings, labels, module)
 
-    data_prep_utils.appendListToXMLfile(labeled_list, module, outfile)
+    training_data.extend(labeled_list)
 
-    file_slug = os.path.basename(infile)
+    with open(outfile, 'wb'):
+        training_data.write(outfile)
+
+    file_slug = os.path.basename(infile.name)
     if not file_slug.startswith('unlabeled_'):
         file_slug = 'unlabeled_' + file_slug
-    remainder_file = os.path.dirname(infile) + file_slug
+    remainder_file = os.path.dirname(infile.name) + file_slug
 
     data_prep_utils.list2file(raw_strings_left, remainder_file)
 
