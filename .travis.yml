@@ -29,9 +29,6 @@ matrix:
       - brew upgrade python
       - python3 -m venv env
       - source env/bin/activate
-before_install:
-- if [[ $BREW_PYTHON == 'python3' ]]; then brew update; brew install $BREW_PYTHON;
-  python3 -m venv venv; source venv/bin/activate; fi
 install:
 - pip install --upgrade pip
 - pip install --upgrade -r requirements.txt
