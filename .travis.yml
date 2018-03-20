@@ -37,8 +37,8 @@ install:
 - pip install --upgrade -r requirements.txt
 - pip install -e .
 script:
-- pytest --with-coverage --cover-package=parserator
-- provider: pypi
+- pytest --cov parserator
+provider: pypi
   skip_cleanup: true
   user: datamade.wheelbuilder
   on:
