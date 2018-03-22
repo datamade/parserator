@@ -10,38 +10,40 @@ notifications:
   irc: chat.freenode.net#dedupe
 matrix:
   include:
-  - os: linux
-    python: 3.4
-  - os: linux
-    python: 2.7
+  - python: 3.6
+  - python: 3.5
+  - python: 2.7
   - os: osx
     language: generic
-    env: BREW_PYTHON='python'
+    before_install:
+      - brew update
+      - brew upgrade python
+      - brew install python2
+      - pip install virtualenv
+      - python2 -m virtualenv env
+      - source env/bin/activate
   - os: osx
     language: generic
-    env: BREW_PYTHON='python3'
-before_install:
-- if [[ $BREW_PYTHON == 'python3' ]]; then brew update; brew install $BREW_PYTHON;
-  python3 -m venv venv; source venv/bin/activate; fi
+    before_install:
+      - brew update
+      - brew upgrade python
+      - python3 -m venv env
+      - source env/bin/activate
 install:
 - pip install --upgrade pip
 - pip install --upgrade -r requirements.txt
 - pip install -e .
 script:
-- nosetests --with-coverage --cover-package=parserator
-after_success:
-- coveralls
-- pip install wheel twine 
-- echo [distutils]                                  > ~/.pypirc
-- echo index-servers = pypi                        >> ~/.pypirc
-- echo [pypi]                                      >> ~/.pypirc
-- echo repository=https://pypi.python.org/pypi     >> ~/.pypirc
-- echo username=datamade.wheelbuilder              >> ~/.pypirc
-- echo password=$PYPIPASSWORD                      >> ~/.pypirc
-- if [[ $TRAVIS_TAG && "$TRAVIS_OS_NAME" == "linux" ]]; then
-    python setup.py sdist bdist_wheel;
-    twine upload dist/*;
-  fi;
+- pytest --cov parserator
+deploy:
+  - provider: pypi
+    skip_cleanup: true
+    user: datamade.wheelbuilder
+    on:
+      tags: true
+      condition: "$TRAVIS_OS_NAME = linux"
+    distributions: sdist
+    password: $PYPIPASSWORD
 env:
   global:
   - secure: ihuVvRbZ6SZuF1EJhz7qjS27HG/HJlviy6A3sb8mXfZSZPTh2aSJRsPFDl40/q9XOSYK5kQGNYC6cY6XKA48oFjjy47al3C5NA8yKzaqKDd6nSvZ04khpaLVtcLtX1zLRRenhR+8m8wOAudmz4BaeKOk1nCzOpTaPLnG3RYC0UM=
