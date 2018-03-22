@@ -9,6 +9,7 @@ reqs = [
     'future>=0.14.3',
     'lxml>=3.7.3',
     'python-crfsuite>=0.7',
+    'chardet',
 ]
 
 if sys.version < '3':

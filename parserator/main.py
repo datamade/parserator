@@ -15,6 +15,7 @@ import glob
 import textwrap
 
 from lxml import etree
+import chardet
 
 from . import manual_labeling
 from . import training
@@ -154,10 +155,22 @@ class XML(argparse.Action):
 
 def file_type(arg):
     try:
-        f = open(arg, 'r')
+        f = open(arg, 'rb')
     except OSError as e:
         message = _("can't open '%s': %s")
         raise ArgumentTypeError(message % (arg, e))
+    else:
+        detector = chardet.universaldetector.UniversalDetector()
+
+        for line in f.readlines():
+            detector.feed(line)
+            if detector.done:
+                break
+
+        f.close()
+        detector.close()
+
+        f = open(arg, 'r', encoding=detector.result['encoding'])
 
     return f
 

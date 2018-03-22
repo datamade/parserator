@@ -28,7 +28,7 @@ def trainModel(training_data, module, model_path,
 
     for components in training_data:
         tokens, labels = list(zip(*set(components)))
-        trainer.append(tokens, labels)
+        trainer.append(module.tokens2features(tokens), labels)
 
     trainer.train(model_path)
 
