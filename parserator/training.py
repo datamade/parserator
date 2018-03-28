@@ -20,7 +20,6 @@ from lxml import etree
 from . import data_prep_utils
 
 
-
 def trainModel(training_data, module, model_path,
                params_to_set={'c1':0.1, 'c2':0.01, 'feature.minfreq':0}):
 
@@ -54,3 +53,22 @@ def train(module, training_data, model_path) :
           done training! model file created: {path}""".format(path=model_path)
 
     print(textwrap.dedent(msg))
+
+
+def readTrainingData(file_locations, GROUP_LABEL):
+    '''
+    Used in downstream tests
+    '''
+    class Mock(object):
+        pass
+    mock_module = Mock()
+    mock_module.PARENT_LABEL = GROUP_LABEL
+    for location in file_locations:
+        with open(location) as f:
+            tree = etree.parse(f)
+
+        xml = tree.getroot()
+        for labeled_tokens in data_prep_utils.TrainingData(xml, mock_module):
+            tokens, labels = list(zip(*labeled_tokens))
+            full_string = ' '.join(tokens)
+            yield full_string, labeled_tokens
