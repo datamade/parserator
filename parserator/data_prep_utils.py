@@ -62,7 +62,8 @@ class TrainingData(object):
 
     def __iter__(self):
         for sequence_xml in self.xml:
-            yield self._xml_to_sequence(sequence_xml)
+            raw_text = etree.tostring(sequence_xml, method='text', encoding='unicode')
+            yield raw_text, self._xml_to_sequence(sequence_xml)
 
 
 # writes a list of strings to a file

@@ -25,7 +25,7 @@ def trainModel(training_data, module, model_path,
 
     trainer = pycrfsuite.Trainer(verbose=False, params=params_to_set)
 
-    for components in training_data:
+    for _, components in training_data:
         tokens, labels = list(zip(*set(components)))
         trainer.append(module.tokens2features(tokens), labels)
 
@@ -68,7 +68,5 @@ def readTrainingData(file_locations, GROUP_LABEL):
             tree = etree.parse(f)
 
         xml = tree.getroot()
-        for labeled_tokens in data_prep_utils.TrainingData(xml, mock_module):
-            tokens, labels = list(zip(*labeled_tokens))
-            full_string = ' '.join(tokens)
-            yield full_string, labeled_tokens
+        for each in data_prep_utils.TrainingData(xml, mock_module):
+            yield each
