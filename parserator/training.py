@@ -26,7 +26,7 @@ def trainModel(training_data, module, model_path,
     trainer = pycrfsuite.Trainer(verbose=False, params=params_to_set)
 
     for _, components in training_data:
-        tokens, labels = list(zip(*set(components)))
+        tokens, labels = list(zip(*components))
         trainer.append(module.tokens2features(tokens), labels)
 
     trainer.train(model_path)

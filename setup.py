@@ -17,7 +17,7 @@ if sys.version < '3':
 
 
 setup(
-    version='0.6.7',
+    version='0.6.8',
     url='https://github.com/datamade/parserator',
     description='Create parsers',
     name='parserator',

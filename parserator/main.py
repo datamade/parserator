@@ -195,7 +195,7 @@ def training_data(arg):
                 raise argparse.ArgumentTypeError('%s is not a valid xml file' % (f.name,))
 
             file_xml = tree.getroot()
-            training_data.update(list(data_prep_utils.TrainingData(file_xml)))
+            training_data.update(data_prep_utils.TrainingData(file_xml))
 
     if not training_data:
         raise argparse.ArgumentTypeError("No training data found. Perhaps double check "
