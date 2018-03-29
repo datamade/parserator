@@ -42,7 +42,7 @@ deploy:
     on:
       tags: true
       condition: "$TRAVIS_OS_NAME = linux"
-    distributions: sdist
+    distributions: "sdist bdist_wheel"
     password: $PYPIPASSWORD
 env:
   global:
