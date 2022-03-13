@@ -1,2 +1,4 @@
-pytest
-pytest-coverage
+future>=0.14.3
+lxml>=3.7.3
+python-crfsuite>=0.9.6
+chardet

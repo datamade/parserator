@@ -80,6 +80,11 @@ Then, in a Python shell, you can import your parser and use the ```parse``` and 
 * Distribution: https://pypi.python.org/pypi/parserator
 
 
+## Changes
+
+v0.7.0, 2022-03-12 - Remove python 2.7 support; add Python 3.10 support. 
+
+
 ## Team
 
 * [Forest Gregg](https://github.com/fgregg), DataMade

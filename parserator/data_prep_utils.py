@@ -1,17 +1,8 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-from builtins import open
-
-import os
-import sys
 
 from lxml import etree
 
-if sys.version < '3' :
-    from backports import csv
-else :
-    import csv
+import csv
 
 
 class TrainingData(object):

@@ -1,25 +1,10 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-from __future__ import print_function
-from __future__ import absolute_import
-from builtins import zip
-from builtins import str
-from builtins import range
-from lxml import etree
+import csv
 import sys
 import os.path
 from . import data_prep_utils
-import re
-import csv
-from argparse import ArgumentParser
 from collections import OrderedDict
-import io
 
-if sys.version < '3' :
-    from backports import csv
-else :
-    import csv
 
 def consoleLabel(raw_strings, labels, module): 
     print('\nStart console labeling!\n')
