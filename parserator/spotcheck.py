@@ -1,9 +1,7 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
-from __future__ import print_function
-from builtins import zip
 import pycrfsuite
+
 
 def compareTaggers(model1, model2, string_list, module_name):
     """

@@ -1,15 +1,7 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-from __future__ import print_function
-from __future__ import absolute_import
-
-from builtins import open
 
 import argparse
 import os
-import shutil
-import fileinput
 import sys
 import glob
 import textwrap
@@ -70,7 +62,7 @@ def dispatch():
     args.func(args)
 
 
-    
+
 def label(args) :
     manual_labeling.label(args.module, args.infile, args.outfile, args.xml)
 
@@ -99,7 +91,7 @@ def init(args) :
     data = "raw"
     training = "training"
     tests = 'tests'
-    
+
     dirs_to_mk = [name, data, training, tests]
 
     print('\nInitializing directories for %s' %name, sys.stderr)
@@ -220,7 +212,7 @@ class ModelFile(argparse.Action):
                 msg = """
                       Invalid --modelfile argument
                       Models available: %s"""
-                raise argparse.ArgumentTypeError(text.dedent(msg) % module.MODEL_FILES)
+                raise argparse.ArgumentTypeError(msg % module.MODEL_FILES)
         else:
             raise argparse.ArgumentError(self, 'This parser does not allow for multiple models')
 

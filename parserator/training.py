@@ -1,18 +1,9 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
-from __future__ import print_function
-from __future__ import absolute_import
-
-from builtins import zip
-
-import random
 import os
-from imp import reload
 import textwrap
 import re
 import time
-import argparse
 
 import pycrfsuite
 from lxml import etree

@@ -10,18 +10,10 @@ notifications:
   irc: chat.freenode.net#dedupe
 matrix:
   include:
-  - python: 3.6
-  - python: 3.5
-  - python: 2.7
-  - os: osx
-    language: generic
-    before_install:
-      - brew update
-      - brew upgrade python
-      - brew install python2
-      - pip install virtualenv
-      - python2 -m virtualenv env
-      - source env/bin/activate
+  - python: 3.7
+  - python: 3.8
+  - python: 3.9
+  - python: 3.10
   - os: osx
     language: generic
     before_install:
@@ -31,7 +23,7 @@ matrix:
       - source env/bin/activate
 install:
 - pip install --upgrade pip
-- pip install --upgrade -r requirements.txt
+- pip install --upgrade -r requirements-dev.txt
 - pip install -e .
 script:
 - pytest --cov parserator
