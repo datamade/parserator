@@ -1,6 +1,3 @@
-#!/usr/bin/python
-
-
 import unittest
 
 from lxml import etree

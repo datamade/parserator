@@ -1,6 +1,3 @@
-#!/usr/bin/python
-
-
 import csv
 import os.path
 import sys

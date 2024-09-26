@@ -1,6 +1,3 @@
-#!/usr/bin/python
-
-
 def init_template():
 
     return """\
