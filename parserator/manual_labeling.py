@@ -2,21 +2,11 @@
 
 
 import csv
-import io
 import os.path
-import re
 import sys
-from argparse import ArgumentParser
 from collections import OrderedDict
 
-from lxml import etree
-
 from . import data_prep_utils
-
-if sys.version < "3":
-    from backports import csv
-else:
-    import csv
 
 
 def consoleLabel(raw_strings, labels, module):

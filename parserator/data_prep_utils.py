@@ -1,14 +1,8 @@
 #!/usr/bin/python
 
-import os
-import sys
-
 from lxml import etree
 
-if sys.version < "3":
-    from backports import csv
-else:
-    import csv
+import csv
 
 
 class TrainingData:

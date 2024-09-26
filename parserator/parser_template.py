@@ -16,9 +16,9 @@ from collections import OrderedDict
 
 #  _____________________
 # |1. CONFIGURE LABELS! |
-# |_____________________| 
-#     (\\__/) || 
-#     (•ㅅ•) || 
+# |_____________________|
+#     (\\__/) ||
+#     (•ㅅ•) ||
 #     / 　 づ
 LABELS = [] # The labels should be a list of strings
 
@@ -65,9 +65,9 @@ def tag(raw_string) :
 
 #  _____________________
 # |2. CONFIGURE TOKENS! |
-# |_____________________| 
-#     (\\__/) || 
-#     (•ㅅ•) || 
+# |_____________________|
+#     (\\__/) ||
+#     (•ㅅ•) ||
 #     / 　 づ
 def tokenize(raw_string):
     # this determines how any given string is split into its tokens
@@ -78,7 +78,7 @@ def tokenize(raw_string):
             raw_string = str(raw_string, encoding='utf-8')
         except:
             raw_string = str(raw_string)
-    
+
     re_tokens = # re.compile( [REGEX HERE], re.VERBOSE | re.UNICODE)
     tokens = re_tokens.findall(raw_string)
 
@@ -89,14 +89,14 @@ def tokenize(raw_string):
 
 #  _______________________
 # |3. CONFIGURE FEATURES! |
-# |_______________________| 
-#     (\\__/) || 
-#     (•ㅅ•) || 
+# |_______________________|
+#     (\\__/) ||
+#     (•ㅅ•) ||
 #     / 　 づ
 def tokens2features(tokens):
     # this should call tokenFeatures to get features for individual tokens,
     # as well as define any features that are dependent upon tokens before/after
-    
+
     feature_sequence = [tokenFeatures(tokens[0])]
     previous_features = feature_sequence[-1].copy()
 
@@ -107,11 +107,11 @@ def tokens2features(tokens):
 
         # features for the features of adjacent tokens
         feature_sequence[-1]['next'] = current_features
-        token_features['previous'] = previous_features        
-        
+        token_features['previous'] = previous_features
+
         # DEFINE ANY OTHER FEATURES THAT ARE DEPENDENT UPON TOKENS BEFORE/AFTER
         # for example, a feature for whether a certain character has appeared previously in the token sequence
-        
+
         feature_sequence.append(token_features)
         previous_features = current_features
 
@@ -122,7 +122,7 @@ def tokens2features(tokens):
         feature_sequence[1]['previous']['rawstring.start'] = True
         feature_sequence[-2]['next']['rawstring.end'] = True
 
-    else : 
+    else :
         # a singleton feature, for if there is only one token in a string
         feature_sequence[0]['singleton'] = True
 
@@ -143,7 +143,7 @@ def casing(token) :
     if token.isupper() :
         return 'upper'
     elif token.islower() :
-        return 'lower' 
+        return 'lower'
     elif token.istitle() :
         return 'title'
     elif token.isalpha() :
@@ -203,7 +203,7 @@ class TestTokenizing(unittest.TestCase) :
     def test_split_on_punc(self) :
 
         assert tokenize('foo,bar') == ['foo,', 'bar']
-    
+
     def test_spaces(self) :
 
         assert tokenize('foo bar') == ['foo', 'bar']
@@ -212,7 +212,7 @@ class TestTokenizing(unittest.TestCase) :
         assert tokenize(' foo bar') == ['foo', 'bar']
 
 if __name__ == '__main__' :
-    unittest.main()    
+    unittest.main()
 """
         % module_name
     )

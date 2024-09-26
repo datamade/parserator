@@ -146,8 +146,8 @@ def file_type(arg):
     try:
         f = open(arg, "rb")
     except OSError as e:
-        message = _("can't open '%s': %s")
-        raise ArgumentTypeError(message % (arg, e))
+        message = "can't open '%s': %s"
+        raise argparse.ArgumentTypeError(message % (arg, e))
     else:
         detector = chardet.universaldetector.UniversalDetector()
 
@@ -216,7 +216,9 @@ class ModelFile(argparse.Action):
                 msg = """
                       Invalid --modelfile argument
                       Models available: %s"""
-                raise argparse.ArgumentTypeError(text.dedent(msg) % module.MODEL_FILES)
+                raise argparse.ArgumentTypeError(
+                    textwrap.dedent(msg) % module.MODEL_FILES
+                )
         else:
             raise argparse.ArgumentError(
                 self, "This parser does not allow for multiple models"
