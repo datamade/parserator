@@ -1,7 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
-from __future__ import print_function
 
 import unittest
 
@@ -10,7 +8,7 @@ from lxml import etree
 from parserator import data_prep_utils
 
 
-class Mock(object):
+class Mock:
     pass
 
 

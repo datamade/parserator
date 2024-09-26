@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # parserator documentation build configuration file, created by
 # sphinx-quickstart on Tue Jan 20 12:22:44 2015.
