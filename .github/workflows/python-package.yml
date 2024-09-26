@@ -43,18 +43,9 @@ jobs:
     - name: Install dependencies
       run: |
         pip install --upgrade pip
-        pip install -e .
-    - name: Install test dependencies
-      run: pip install -r requirements.txt
+        pip install -e .[dev]
     - name: pytest
       run: pytest
-    - name: Code Coverage
-      uses: codecov/codecov-action@v4
-      env:
-        OS: ${{ matrix.os }}
-        PYTHON: '3.12'
-      with:
-        env_vars: OS,PYTHON
 
   deploy:
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
