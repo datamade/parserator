@@ -36,7 +36,6 @@ parserator = "parserator.main:dispatch"
 dev = ["pytest",
        "black",
        "isort",
-       "mypyp",
        "flake8"       
 ]
 
