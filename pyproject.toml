@@ -1,0 +1,67 @@
+[project]
+name = "parserator"
+version = "0.6.8"
+description = "Create parsers"
+readme = "README.md"
+license = {text = "MIT License", url = "http://www.opensource.org/licenses/mit-license.php"}
+requires-python = ">=3.7"
+dependencies = [
+  'lxml>=3.7.3',
+  'python-crfsuite>=0.7',
+  'chardet',
+  ]
+classifiers = [
+  'Development Status :: 3 - Alpha',
+  'Intended Audience :: Developers',
+  'Intended Audience :: Science/Research',
+  'License :: OSI Approved :: MIT License',
+  'Natural Language :: English',
+  'Operating System :: MacOS :: MacOS X',
+  'Operating System :: Microsoft :: Windows',
+  'Operating System :: POSIX',
+  'Programming Language :: Python :: 2.7',
+  'Programming Language :: Python :: 3.4',
+  'Topic :: Software Development :: Libraries :: Python Modules',
+  'Topic :: Scientific/Engineering',
+  'Topic :: Scientific/Engineering :: Information Analysis',
+]  
+
+[project.urls]
+Homepage = "https://github.com/datamade/parserator"
+
+[project.scripts]
+parserator = "parserator.main:dispatch"
+
+[project.optional-dependencies]
+dev = ["pytest",
+       "black",
+       "isort",
+       "flake8"       
+]
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[tool.setuptools.packages.find]
+include = ["parserator"]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+testpaths = [
+  "tests",
+  ]
+
+[tool.mypy]
+files = ["parserator"]
+show_error_codes = true
+ignore_missing_imports = true
+check_untyped_defs = true
+implicit_reexport = false
+
+[tool.isort]
+profile = "black"
+src_paths = ["parserator", "tests"]
