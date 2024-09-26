@@ -54,7 +54,6 @@ jobs:
     runs-on: ubuntu-latest
 
     name: Upload release to PyPI
-    runs-on: ubuntu-latest
     environment:
       name: pypi
       url: https://pypi.org/p/parserator
