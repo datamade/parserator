@@ -1,12 +1,10 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
-from __future__ import print_function
-from sklearn.metrics import f1_score
+
+import pycrfsuite
 from sklearn.base import BaseEstimator
 from sklearn.grid_search import GridSearchCV
-from training import get_data_sklearn_format
-import pycrfsuite
+from sklearn.metrics import f1_score
 
 
 def f1_with_flattening(estimator, X, y):
@@ -69,10 +67,10 @@ class SequenceEstimator(BaseEstimator):
         self.c2 = c2
         self.feature_minfreq = feature_minfreq
 
-    def fit(self, X, y, **params, model_path):
+    def fit(self, X, y, model_path, **params):
         # sklearn requires parameters to be declared as fields of the estimator,
         # an we can't have a full stop there. Replace with an underscore
-        params = {k.replace('_', '.'): v for k, v in self.__dict__.items()}
+        params = {k.replace("_", "."): v for k, v in self.__dict__.items()}
         trainer = pycrfsuite.Trainer(verbose=False, params=params)
         for raw_text, labels in zip(X, y):
             tokens = tokenize(raw_text)
@@ -88,13 +86,19 @@ class SequenceEstimator(BaseEstimator):
         return predictions
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # refer to http://www.chokkan.org/software/crfsuite/manual.html
     # for description of parameters
-    cv = GridSearchCV(SequenceEstimator(), {'c1': [10 ** x for x in range(-2, 2)],
-                                           'c2': [10 ** x for x in range(-2, 4)],
-                                           'feature_minfreq': [0, 3, 5]},
-                      scoring=f1_with_flattening, verbose=5)
+    cv = GridSearchCV(
+        SequenceEstimator(),
+        {
+            "c1": [10**x for x in range(-2, 2)],
+            "c2": [10**x for x in range(-2, 4)],
+            "feature_minfreq": [0, 3, 5],
+        },
+        scoring=f1_with_flattening,
+        verbose=5,
+    )
     X, y = get_data_sklearn_format()
     cv.fit(X, y)
     print(cv.best_params_)

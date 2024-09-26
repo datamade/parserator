@@ -1,20 +1,17 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-from builtins import open
 
 import os
 import sys
 
 from lxml import etree
 
-if sys.version < '3' :
+if sys.version < "3":
     from backports import csv
-else :
+else:
     import csv
 
 
-class TrainingData(object):
+class TrainingData:
     def __init__(self, xml=None, module=None):
 
         if xml is not None:
@@ -43,10 +40,10 @@ class TrainingData(object):
         for token, label in labeled_sequence:
             component_xml = etree.Element(label)
             component_xml.text = token
-            component_xml.tail = ' '
+            component_xml.tail = " "
             sequence_xml.append(component_xml)
 
-        sequence_xml[-1].tail = ''
+        sequence_xml[-1].tail = ""
 
         return sequence_xml
 
@@ -62,13 +59,13 @@ class TrainingData(object):
 
     def __iter__(self):
         for sequence_xml in self.xml:
-            raw_text = etree.tostring(sequence_xml, method='text', encoding='unicode')
+            raw_text = etree.tostring(sequence_xml, method="text", encoding="unicode")
             yield raw_text, self._xml_to_sequence(sequence_xml)
 
 
 # writes a list of strings to a file
 def list2file(string_list, filepath):
-    with open(filepath, 'w') as csvfile:
+    with open(filepath, "w") as csvfile:
         writer = csv.writer(csvfile, doublequote=True, quoting=csv.QUOTE_MINIMAL)
         for string in string_list:
             writer.writerow([string])

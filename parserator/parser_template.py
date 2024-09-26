@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
+
 
 def init_template():
 
@@ -17,7 +17,7 @@ from collections import OrderedDict
 #  _____________________
 # |1. CONFIGURE LABELS! |
 # |_____________________| 
-#     (\__/) || 
+#     (\\__/) || 
 #     (•ㅅ•) || 
 #     / 　 づ
 LABELS = [] # The labels should be a list of strings
@@ -66,7 +66,7 @@ def tag(raw_string) :
 #  _____________________
 # |2. CONFIGURE TOKENS! |
 # |_____________________| 
-#     (\__/) || 
+#     (\\__/) || 
 #     (•ㅅ•) || 
 #     / 　 づ
 def tokenize(raw_string):
@@ -90,7 +90,7 @@ def tokenize(raw_string):
 #  _______________________
 # |3. CONFIGURE FEATURES! |
 # |_______________________| 
-#     (\__/) || 
+#     (\\__/) || 
 #     (•ㅅ•) || 
 #     / 　 づ
 def tokens2features(tokens):
@@ -152,6 +152,7 @@ def casing(token) :
         return False
 """
 
+
 def setup_template(module_name):
 
     return """\
@@ -164,8 +165,8 @@ setup(
     version='0.1',
     url='',
     description='',
-    name='%s',
-    packages=['%s'],
+    name='{}',
+    packages=['{}'],
     license='The MIT License: http://www.opensource.org/licenses/mit-license.php',
     install_requires=['python-crfsuite>=0.7',
                       'lxml'],
@@ -184,11 +185,16 @@ setup(
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Information Analysis']
 )
-"""%(module_name, module_name)
+""".format(
+        module_name,
+        module_name,
+    )
+
 
 def test_tokenize_template(module_name):
 
-    return """\
+    return (
+        """\
 from %s import tokenize
 import unittest
 
@@ -207,4 +213,6 @@ class TestTokenizing(unittest.TestCase) :
 
 if __name__ == '__main__' :
     unittest.main()    
-""" %module_name
+"""
+        % module_name
+    )
