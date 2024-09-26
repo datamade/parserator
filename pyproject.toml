@@ -1,6 +1,6 @@
 [project]
 name = "parserator"
-version = "0.6.8"
+version = "0.6.9"
 description = "Create parsers"
 readme = "README.md"
 license = {text = "MIT License", url = "http://www.opensource.org/licenses/mit-license.php"}
