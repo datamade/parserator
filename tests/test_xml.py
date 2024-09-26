@@ -2,9 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
-from parserator import data_prep_utils
-from lxml import etree
+
 import unittest
+
+from lxml import etree
+
+from parserator import data_prep_utils
 
 
 class Mock(object):

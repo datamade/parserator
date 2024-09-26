@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
-from lxml import etree
-
 import csv
+
+from lxml import etree
 
 
 class TrainingData:
