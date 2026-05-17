@@ -51,6 +51,13 @@ class TrainingData:
 
     def __iter__(self):
         for sequence_xml in self.xml:
+            # Skip XML comments (handy for grouping examples in the same
+            # file) and sequences that ended up with no children, both of
+            # which would otherwise blow up trainModel downstream.
+            if isinstance(sequence_xml, etree._Comment):
+                continue
+            if len(sequence_xml) == 0:
+                continue
             raw_text = etree.tostring(sequence_xml, method="text", encoding="unicode")
             yield raw_text, self._xml_to_sequence(sequence_xml)
 
