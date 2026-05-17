@@ -103,7 +103,7 @@ How to make a parser using parserator
             <TokenSequence><label>token</label> <label>token</label> <label>token</label></TokenSequence>  
         </Collection>
     
-    * If you have labeled strings in other formats, they will need to be converted to this XML format for parserator to read the data. In ``data_prep_utils.py``, there are some tools that can help you do this. For example, the sequence2XML function reads labeled sequences represented as a list of tuples and returns the analogous XML represention: ``[(token, label), (token, label), ...]`` -> ``<TokenSequence><label>token</label> <label>token</label> ... </TokenSequence>``
+    * If you have labeled strings in other formats, they will need to be converted to this XML format for parserator to read the data. In ``data_prep_utils.py``, there are some tools that can help you do this. For example, the sequence2XML function reads labeled sequences represented as a list of tuples and returns the analogous XML representation: ``[(token, label), (token, label), ...]`` -> ``<TokenSequence><label>token</label> <label>token</label> ... </TokenSequence>``
     * If you only have raw, unlabeled strings, parserator can help you manually label tokens through a command line interface. To start a manual labeling task, run ``parserator label [infile] [outfile] [modulename]``
 
         - The infile option should be the filepath for a csv, where each line is a string
