@@ -51,5 +51,33 @@ class TestList2XML(unittest.TestCase):
         assert correct_xml == generated_xml
 
 
+class TestTrainingDataIter(unittest.TestCase):
+    def _td(self, xml_str):
+        return data_prep_utils.TrainingData(xml=etree.fromstring(xml_str))
+
+    def test_skips_comments(self):
+        # Comments are useful for grouping examples in the same file; they
+        # used to leak into __iter__ and crash trainModel.
+        td = self._td(
+            "<Collection>"
+            "<!-- group one -->"
+            "<TokenSequence><foo>a</foo></TokenSequence>"
+            "<!-- group two -->"
+            "<TokenSequence><foo>b</foo></TokenSequence>"
+            "</Collection>"
+        )
+        assert [raw for raw, _ in td] == ["a", "b"]
+
+    def test_skips_empty_sequences(self):
+        td = self._td(
+            "<Collection>"
+            "<TokenSequence><foo>a</foo></TokenSequence>"
+            "<TokenSequence></TokenSequence>"
+            "<TokenSequence><foo>b</foo></TokenSequence>"
+            "</Collection>"
+        )
+        assert [raw for raw, _ in td] == ["a", "b"]
+
+
 if __name__ == "__main__":
     unittest.main()
